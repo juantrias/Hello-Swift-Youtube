@@ -10,7 +10,7 @@ import UIKit
 
 let reuseIdentifier = "YouTubeVideoCell"
 
-class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
     @IBOutlet var collectionView: UICollectionView!
     
@@ -27,15 +27,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
 
         // Do any additional setup after loading the view.
         
-        YoutubeManager.sharedInstance.search("Google IO 2014"
-            , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) in
-                self.searchListJSONModel = searchListJSONModel
-                self.collectionView.reloadData()
-                println("YoutubeManager search onSuccess \(self.searchListJSONModel)")
-            }
-            , onError: { (error: NSError) in
-                // TODO alert view
-        })
+        // TODO remember the last search
+        searchVideos("Google IO 2014")
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,6 +36,18 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         // Dispose of any resources that can be recreated.
     }
 
+    func searchVideos(searchString: String) {
+        YoutubeManager.sharedInstance.search(searchString
+            , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) in
+                self.searchListJSONModel = searchListJSONModel
+                self.collectionView.reloadData()
+                println("YoutubeManager search onSuccess")  // \(self.searchListJSONModel)")
+            }
+            , onError: { (error: NSError) in
+                // TODO alert view
+        })
+    }
+    
     /*
     // #pragma mark - Navigation
 
@@ -115,5 +120,19 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     
     }
     */
+    
+    // #pragma mark UISearchBarDelegate
+    
+    func searchBar(searchBar: UISearchBar!, textDidChange searchText: String!) {
+        println("textDidChange \(searchText)")
+        if (countElements(searchText) >= 3) {
+            let delay = 0.1 // seconds
+            // TODO cancel previous search
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+                self.searchVideos(searchText)
+            })
+        }
+        
+    }
 
 }

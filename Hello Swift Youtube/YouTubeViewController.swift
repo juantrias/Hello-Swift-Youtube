@@ -59,7 +59,7 @@ class YouTubeViewController: UICollectionViewController {
     }*/
 
     override func collectionView(collectionView: UICollectionView?, numberOfItemsInSection section: Int) -> Int {
-        if (searchListJSONModel) {
+        if (searchListJSONModel != nil) {
             return searchListJSONModel!.items.count
         } else {
             return 0
@@ -70,7 +70,7 @@ class YouTubeViewController: UICollectionViewController {
         let cell = collectionView?.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as YouTubeCell
     
         // Configure the cell
-        if (searchListJSONModel) {
+        if (searchListJSONModel != nil) {
             let item: YUItemJSONModel = searchListJSONModel!.items[indexPath!.row] as YUItemJSONModel
             cell.titleLabel.text = item.snippet.title
             cell.thumbImageView.setImageWithURL(NSURL(string: item.snippet.thumbnails.defaultThumb.url))

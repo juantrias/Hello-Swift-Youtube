@@ -28,8 +28,7 @@ class YoutubeManager {
     }
     
     func search(query: String, onSuccess: (YUSearchListJSONModel) -> Void, onError: (NSError) -> Void) {
-        // TODO bridgeToObjectiveC() unneccessary in XCode 6 Beta 3?
-        var params = ["part": "id,snippet", "q": query, "type": "video", "key": YOUTUBE_API_KEY].bridgeToObjectiveC()
+        var params = ["part": "id,snippet", "q": query, "type": "video", "key": YOUTUBE_API_KEY]
         
         requestManager.GET(YOUTUBE_API_SEARCH, parameters: params, clazz:YUSearchListJSONModel.classForCoder()
         , success: {(operation: AFHTTPRequestOperation!, response: AnyObject!) in

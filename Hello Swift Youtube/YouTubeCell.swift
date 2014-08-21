@@ -10,8 +10,8 @@ import UIKit
 
 class YouTubeCell: UICollectionViewCell {
     
-    @IBOutlet var thumbImageView: UIImageView
-    @IBOutlet var titleLabel: UILabel
+    @IBOutlet var thumbImageView: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
     
     // WARNING: Do not implement the init(frame: CGRect) or the app will crash.
     // The storyboard uses the default initializer init(coder)

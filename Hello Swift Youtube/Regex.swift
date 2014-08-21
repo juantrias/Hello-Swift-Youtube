@@ -9,7 +9,7 @@
 
 import Foundation
 
-operator infix =~ {}
+infix operator =~ {}
 
 func =~ (input: String, pattern: String) -> Bool {
     return Regex(pattern).test(input)
@@ -27,6 +27,6 @@ class Regex {
     
     func test(input: String) -> Bool {
         let matches = self.internalExpression.matchesInString(input, options: nil, range:NSMakeRange(0, countElements(input)))
-        return matches?.count > 0
+        return matches.count > 0
     }
 }

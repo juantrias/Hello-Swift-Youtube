@@ -10,8 +10,10 @@ import UIKit
 
 let reuseIdentifier = "YouTubeVideoCell"
 
-class YouTubeViewController: UICollectionViewController {
+class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
+    @IBOutlet var collectionView: UICollectionView!
+    
     var searchListJSONModel: YUSearchListJSONModel? = nil
     
     override func viewDidLoad() {
@@ -54,21 +56,24 @@ class YouTubeViewController: UICollectionViewController {
 
     // #pragma mark UICollectionViewDataSource
 
-    /*override func numberOfSectionsInCollectionView(collectionView: UICollectionView?) -> Int {
+    /*func numberOfSectionsInCollectionView(collectionView: UICollectionView!) -> Int {
+        println("numberOfSectionsInCollectionView 1")
         return 1
     }*/
 
-    override func collectionView(collectionView: UICollectionView?, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
         if (searchListJSONModel != nil) {
+            println("numberOfItemsInSection \(searchListJSONModel!.items.count)")
             return searchListJSONModel!.items.count
         } else {
             return 0
         }
     }
-
-    override func collectionView(collectionView: UICollectionView?, cellForItemAtIndexPath indexPath: NSIndexPath?) -> UICollectionViewCell? {
-        let cell = collectionView?.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as YouTubeCell
     
+    func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as YouTubeCell
+        
         // Configure the cell
         if (searchListJSONModel != nil) {
             let item: YUItemJSONModel = searchListJSONModel!.items[indexPath!.row] as YUItemJSONModel

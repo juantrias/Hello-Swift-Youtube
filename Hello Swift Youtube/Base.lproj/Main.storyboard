@@ -18,9 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="YouTubeCollectionView" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ciH-cp-GkF">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="YouTubeCollectionView" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ciH-cp-GkF">
                                 <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.10566986239999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gpd-OX-yG5">
                                     <size key="itemSize" width="154" height="144"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -50,7 +49,6 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="0.078118603300000006" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="5KL-sp-DK7" secondAttribute="trailing" id="1yk-ou-fGE"/>
                                             <constraint firstItem="8SQ-Fy-o6S" firstAttribute="leading" secondItem="fpI-ca-maM" secondAttribute="leadingMargin" constant="12" id="Brl-xd-O2i"/>
@@ -71,12 +69,21 @@
                                     <outlet property="delegate" destination="rlP-Gv-9Hc" id="kCV-QC-nmW"/>
                                 </connections>
                             </collectionView>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vlb-Mh-Wt9">
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="vlb-Mh-Wt9">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.96137639531147079" blue="0.17156748314416259" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ciH-cp-GkF" firstAttribute="leading" secondItem="3ax-JL-EEj" secondAttribute="leadingMargin" constant="-16" id="5p5-FF-lFg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="vlb-Mh-Wt9" secondAttribute="trailing" constant="-16" id="7XR-bp-y44"/>
+                            <constraint firstItem="ciH-cp-GkF" firstAttribute="top" secondItem="vlb-Mh-Wt9" secondAttribute="bottom" id="Bmg-OV-yvI"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ciH-cp-GkF" secondAttribute="trailing" constant="-16" id="Pbl-E9-cTd"/>
+                            <constraint firstItem="vlb-Mh-Wt9" firstAttribute="top" secondItem="SXZ-nG-8jR" secondAttribute="bottom" id="fuQ-a2-dPo"/>
+                            <constraint firstItem="vlb-Mh-Wt9" firstAttribute="leading" secondItem="3ax-JL-EEj" secondAttribute="leadingMargin" constant="-16" id="keE-pi-6xo"/>
+                            <constraint firstItem="IQS-jU-irC" firstAttribute="top" secondItem="ciH-cp-GkF" secondAttribute="bottom" id="uxJ-i6-pup"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hZb-K1-D3L"/>
                     <connections>
@@ -91,6 +98,7 @@
         <scene sceneID="dsF-HR-p9x">
             <objects>
                 <navigationController navigationBarHidden="YES" id="iRT-fA-6pb" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics">

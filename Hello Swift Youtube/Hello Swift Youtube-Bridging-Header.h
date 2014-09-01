@@ -8,6 +8,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <JSONModel/JSONModel.h>
+#import <youtube-ios-player-helper/YTPlayerView.h>
 
 // Project ObjC classes
 #import "YUSearchListJSONModel.h"

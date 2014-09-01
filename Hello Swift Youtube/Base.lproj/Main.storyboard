@@ -6,7 +6,7 @@
         <capability name="Constraints with attributes relative to the layout margin" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--You Tube View Controller-->
+        <!--Videos-->
         <scene sceneID="lQx-pM-JxQ">
             <objects>
                 <viewController id="rlP-Gv-9Hc" customClass="YouTubeViewController" customModule="Hello_Swift_Youtube" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="YouTubeCollectionView" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ciH-cp-GkF">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" restorationIdentifier="YouTubeCollectionView" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ciH-cp-GkF">
                                 <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gpd-OX-yG5">
                                     <size key="itemSize" width="154" height="144"/>
@@ -61,6 +61,7 @@
                                         <connections>
                                             <outlet property="thumbImageView" destination="5KL-sp-DK7" id="PjE-ac-Yf0"/>
                                             <outlet property="titleLabel" destination="8SQ-Fy-o6S" id="QGP-q1-nns"/>
+                                            <segue destination="idh-OF-d1Y" kind="show" id="bhF-kM-69H"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -69,7 +70,7 @@
                                     <outlet property="delegate" destination="rlP-Gv-9Hc" id="kCV-QC-nmW"/>
                                 </connections>
                             </collectionView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="vlb-Mh-Wt9">
+                            <searchBar contentMode="redraw" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vlb-Mh-Wt9">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -88,7 +89,7 @@
                             <constraint firstItem="IQS-jU-irC" firstAttribute="top" secondItem="ciH-cp-GkF" secondAttribute="bottom" id="uxJ-i6-pup"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="hZb-K1-D3L"/>
+                    <navigationItem key="navigationItem" title="Videos" id="hZb-K1-D3L"/>
                     <connections>
                         <outlet property="collectionView" destination="ciH-cp-GkF" id="gMw-HU-01G"/>
                     </connections>
@@ -97,12 +98,38 @@
             </objects>
             <point key="canvasLocation" x="3507" y="4328"/>
         </scene>
+        <!--Video View Controller-->
+        <scene sceneID="xUZ-LZ-Ifu">
+            <objects>
+                <viewController id="idh-OF-d1Y" customClass="VideoViewController" customModule="Hello_Swift_Youtube" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="aRx-Hg-Tx4"/>
+                        <viewControllerLayoutGuide type="bottom" id="xqm-FY-ReF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="poz-w5-nNc">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r6d-Bg-cuM" customClass="YTPlayerView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="playerView" destination="r6d-Bg-cuM" id="GGy-eh-qGc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PQn-Cz-mGf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4017" y="4328"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="dsF-HR-p9x">
             <objects>
-                <navigationController navigationBarHidden="YES" id="iRT-fA-6pb" sceneMemberID="viewController">
+                <navigationController id="iRT-fA-6pb" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <nil key="simulatedTopBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics">
                         <size key="portraitSize" width="320" height="480"/>

@@ -19,13 +19,16 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - JSONModel (0.13.0)
+  - youtube-ios-player-helper (0.1.1)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.2.3)
   - JSONModel (~> 0.13.0)
+  - youtube-ios-player-helper (~> 0.1.1)
 
 SPEC CHECKSUMS:
   AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
   JSONModel: 62ea96b49ea18a8b91ef89c249dba291d8601d82
+  youtube-ios-player-helper: 53aecd0b4763a77e6890e9a7c55abb7b5c4bedea
 
 COCOAPODS: 0.33.1

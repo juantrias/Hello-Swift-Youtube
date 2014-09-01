@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 let reuseIdentifier = "YouTubeVideoCell"
 
@@ -48,17 +49,18 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         })
     }
     
-    /*
     // #pragma mark - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
+        
+        let videoVC: VideoViewController = segue.destinationViewController as VideoViewController
+        var indexPath: NSIndexPath = self.collectionView.indexPathsForSelectedItems()[0] as NSIndexPath
+        videoVC.itemJSONModel = searchListJSONModel!.items[indexPath.row] as YUItemJSONModel
     }
-    */
-
+    
     // #pragma mark UICollectionViewDataSource
 
     /*func numberOfSectionsInCollectionView(collectionView: UICollectionView!) -> Int {
@@ -91,7 +93,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }
 
     // pragma mark <UICollectionViewDelegate>
-
+    
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
     func collectionView(collectionView: UICollectionView?, shouldHighlightItemAtIndexPath indexPath: NSIndexPath?) -> Bool {

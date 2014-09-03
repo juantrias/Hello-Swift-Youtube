@@ -18,8 +18,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" restorationIdentifier="YouTubeCollectionView" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ciH-cp-GkF">
-                                <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                            <searchBar contentMode="redraw" placeholder="Search videos..." translatesAutoresizingMaskIntoConstraints="NO" id="vlb-Mh-Wt9">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="rlP-Gv-9Hc" id="ndh-Rf-oRr"/>
+                                </connections>
+                            </searchBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="YouTubeCollectionView" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ciH-cp-GkF">
+                                <rect key="frame" x="0.0" y="108" width="320" height="372"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gpd-OX-yG5">
                                     <size key="itemSize" width="154" height="144"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -70,13 +77,6 @@
                                     <outlet property="delegate" destination="rlP-Gv-9Hc" id="kCV-QC-nmW"/>
                                 </connections>
                             </collectionView>
-                            <searchBar contentMode="redraw" misplaced="YES" placeholder="Search videos..." translatesAutoresizingMaskIntoConstraints="NO" id="vlb-Mh-Wt9">
-                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="rlP-Gv-9Hc" id="ndh-Rf-oRr"/>
-                                </connections>
-                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

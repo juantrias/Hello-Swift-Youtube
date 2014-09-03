@@ -12,7 +12,10 @@ let reuseIdentifier = "YouTubeVideoCell"
 
 class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, YoutubeSearchDataProviderDelegate {
 
+    let SP_KEY_LAST_SEARCH_STRING = "last-search-string"
+    
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var searchBar: UISearchBar!
     
     var youtubeSearchDataProvider: YoutubeSearchDataProvider? = nil
     
@@ -27,8 +30,11 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
 
         // Do any additional setup after loading the view.
         
-        // TODO remember the last search
-        searchVideos("Google IO 2014")
+        let lastSearchString = NSUserDefaults.standardUserDefaults().stringForKey(SP_KEY_LAST_SEARCH_STRING)
+        if (lastSearchString != nil) {
+            searchBar.text = lastSearchString
+            searchVideos(lastSearchString!)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +43,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }
 
     func searchVideos(searchString: String) {
+        
+        NSUserDefaults.standardUserDefaults().setObject(searchString, forKey: SP_KEY_LAST_SEARCH_STRING)
         
         // La primera llamada al YoutubeManager la hace el VC, cuando recibe la respuesta con el total de resultados instancia el YoutubeSearchDataProvider con el dataCount, que a su vez inicializa el AWPagedArray que requiere un dataCount
         

@@ -17,13 +17,13 @@ protocol YoutubeSearchDataProviderDelegate {
 }
 
 @objc
-public class YoutubeSearchDataProvider: NSObject, AWPagedArrayDelegate {
+public class YoutubeSearchDataProvider: NSObject, PagedArrayDelegate {
     
-    public var dataObjects: AWPagedArray {
+    public var dataObjects: PagedArray {
         return self.pagedArray
     }
     
-    private var pagedArray: AWPagedArray
+    private var pagedArray: PagedArray
     private var searchString: String
     private var pageTokens: [UInt: String] //pageNumber -> pageToken
     private var pagesWithOngoingRequests: [UInt: Bool] //pageNumber -> True
@@ -32,7 +32,7 @@ public class YoutubeSearchDataProvider: NSObject, AWPagedArrayDelegate {
     // dataCount: total results from YouTube API
     init(searchString: String, dataCount: UInt, initialObjects: [AnyObject], nextPageToken: String, delegate: YoutubeSearchDataProviderDelegate) {
         self.searchString = searchString
-        self.pagedArray = AWPagedArray(count: dataCount, objectsPerPage: YoutubeManager.sharedInstance.RESULTS_PER_PAGE)
+        self.pagedArray = PagedArray(count: dataCount, objectsPerPage: YoutubeManager.sharedInstance.RESULTS_PER_PAGE)
         self.pagedArray.setObjects(initialObjects, forPage: 1) // Pages start at 1
         self.pageTokens = [2: nextPageToken]
         self.pagesWithOngoingRequests = [UInt: Bool]()
@@ -78,7 +78,7 @@ public class YoutubeSearchDataProvider: NSObject, AWPagedArrayDelegate {
     }
     
     // MARK: - Paged array delegate
-    public func pagedArray(pagedArray: AWPagedArray!, willAccessIndex index: UInt, returnObject: AutoreleasingUnsafeMutablePointer<AnyObject?>) {
+    public func pagedArray(pagedArray: PagedArray!, willAccessIndex index: UInt, returnObject: AutoreleasingUnsafeMutablePointer<AnyObject?>) {
         
         let page = pagedArray.pageForIndex(index)
         if (returnObject.memory!.isKindOfClass(NSNull)) {

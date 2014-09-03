@@ -1,5 +1,5 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/AWPagedArray" "${PODS_ROOT}/Headers/JSONModel" "${PODS_ROOT}/Headers/youtube-ios-player-helper"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/AFNetworking" -isystem "${PODS_ROOT}/Headers/AWPagedArray" -isystem "${PODS_ROOT}/Headers/JSONModel" -isystem "${PODS_ROOT}/Headers/youtube-ios-player-helper"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/JSONModel" "${PODS_ROOT}/Headers/youtube-ios-player-helper"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/AFNetworking" -isystem "${PODS_ROOT}/Headers/JSONModel" -isystem "${PODS_ROOT}/Headers/youtube-ios-player-helper"
 OTHER_LDFLAGS = -ObjC -framework CoreGraphics -framework MobileCoreServices -framework Security -framework SystemConfiguration
 PODS_ROOT = ${SRCROOT}/Pods

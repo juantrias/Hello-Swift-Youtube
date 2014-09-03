@@ -13,7 +13,8 @@
 @interface YUSearchListJSONModel : JSONModel
 
 @property (strong, nonatomic) YUPageInfoJSONModel *pageInfo;
-@property (strong, nonatomic) NSString *nextPageToken;
+@property (strong, nonatomic) NSString<Optional> *nextPageToken;
+@property (strong, nonatomic) NSString<Optional> *prevPageToken;
 @property (strong, nonatomic) NSArray<YUItemJSONModel> *items;
 
 @end

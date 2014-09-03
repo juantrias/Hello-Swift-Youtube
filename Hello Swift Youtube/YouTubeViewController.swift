@@ -7,15 +7,14 @@
 //
 
 import UIKit
-import MediaPlayer
 
 let reuseIdentifier = "YouTubeVideoCell"
 
-class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
+class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, YoutubeSearchDataProviderDelegate {
 
     @IBOutlet var collectionView: UICollectionView!
     
-    var searchListJSONModel: YUSearchListJSONModel? = nil
+    var youtubeSearchDataProvider: YoutubeSearchDataProvider? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,10 +37,17 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }
 
     func searchVideos(searchString: String) {
-        YoutubeManager.sharedInstance.search(searchString
+        
+        // La primera llamada al YoutubeManager la hace el VC, cuando recibe la respuesta con el total de resultados instancia el YoutubeSearchDataProvider con el dataCount, que a su vez inicializa el AWPagedArray que requiere un dataCount
+        
+        YoutubeManager.sharedInstance.search(searchString, pageToken: nil
             , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) in
-                self.searchListJSONModel = searchListJSONModel
+               
+                // TODO instanciar un DataProvider cada vez que hago una busqueda?
+                self.youtubeSearchDataProvider = YoutubeSearchDataProvider(searchString: searchString, dataCount: searchListJSONModel.pageInfo.totalResults, initialObjects: searchListJSONModel.items, nextPageToken:searchListJSONModel.nextPageToken, delegate: self)
+                
                 self.collectionView.reloadData()
+                
                 println("YoutubeManager search onSuccess")  // \(self.searchListJSONModel)")
             }
             , onError: { (error: NSError) in
@@ -49,7 +55,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         })
     }
     
-    // #pragma mark - Navigation
+    // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -58,10 +64,10 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         let videoVC: VideoViewController = segue.destinationViewController as VideoViewController
         var indexPath: NSIndexPath = self.collectionView.indexPathsForSelectedItems()[0] as NSIndexPath
-        videoVC.itemJSONModel = searchListJSONModel!.items[indexPath.row] as YUItemJSONModel
+        videoVC.itemJSONModel = youtubeSearchDataProvider!.dataObjects.objectAtIndex(UInt(indexPath.row)) as YUItemJSONModel
     }
     
-    // #pragma mark UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
 
     /*func numberOfSectionsInCollectionView(collectionView: UICollectionView!) -> Int {
         println("numberOfSectionsInCollectionView 1")
@@ -69,9 +75,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }*/
 
     func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
-        if (searchListJSONModel != nil) {
-            println("numberOfItemsInSection \(searchListJSONModel!.items.count)")
-            return searchListJSONModel!.items.count
+        if (youtubeSearchDataProvider != nil) {
+            return Int(youtubeSearchDataProvider!.dataObjects.count())
         } else {
             return 0
         }
@@ -82,17 +87,22 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as YouTubeCell
         
         // Configure the cell
-        if (searchListJSONModel != nil) {
-            let item: YUItemJSONModel = searchListJSONModel!.items[indexPath!.row] as YUItemJSONModel
-            cell.titleLabel.text = item.snippet.title
-            cell.thumbImageView.setImageWithURL(NSURL(string: item.snippet.thumbnails.defaultThumb.url))
-            
+        if (youtubeSearchDataProvider != nil) {
+            let dataObject: AnyObject! = youtubeSearchDataProvider!.dataObjects.objectAtIndex(UInt(indexPath.row))
+            if (dataObject.isKindOfClass(NSNull.classForCoder())) {
+                cell.titleLabel.text = nil
+                cell.thumbImageView.image = UIImage(named: "icon_video")
+            } else {
+                let item = dataObject as YUItemJSONModel
+                cell.titleLabel.text = item.snippet.title
+                cell.thumbImageView.setImageWithURL(NSURL(string: item.snippet.thumbnails.defaultThumb.url))
+            }
         }
         
         return cell
     }
 
-    // pragma mark <UICollectionViewDelegate>
+    // MARK: - UICollectionViewDelegate
     
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
@@ -123,7 +133,26 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     */
     
-    // #pragma mark UISearchBarDelegate
+    // MARK: - YoutubeSearchDataProviderDelegate
+    
+    func dataProvider(dataProvider: YoutubeSearchDataProvider, didLoadDataAtIndexes indexes: NSIndexSet) {
+        var indexPathsToReload = [NSIndexPath]()
+        indexes.enumerateIndexesUsingBlock { (idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            
+            let indexPath = NSIndexPath(forRow: idx, inSection: 0)
+            let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems() as [NSIndexPath] // ATT: the  contains function requires this casting to [NSIndexPath]
+            if (contains(visibleIndexPaths, indexPath)) {
+                indexPathsToReload.append(indexPath)
+            }
+        }
+        
+        if (indexPathsToReload.count > 0) {
+            self.collectionView.reloadItemsAtIndexPaths(indexPathsToReload)
+        }
+        
+    }
+    
+    // MARK: - UISearchBarDelegate
     
     func searchBar(searchBar: UISearchBar!, textDidChange searchText: String!) {
         println("textDidChange \(searchText)")

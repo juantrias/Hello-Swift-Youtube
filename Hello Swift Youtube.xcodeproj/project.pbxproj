@@ -25,6 +25,7 @@
 		0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CC19A5EC0C0097263B /* Regex.swift */; };
 		0D1EC3D019A5EE080097263B /* YouTubeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */; };
 		0DAA563219A77E12000F71E5 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA563119A77E12000F71E5 /* VideoViewController.swift */; };
+		0DFA207D19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA207C19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift */; };
 		6238B6E29E5A4670BBB74B5F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8211600492F04EA3B0513AFC /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeCell.swift; sourceTree = "<group>"; };
 		0D1EC3D119A5EE400097263B /* DLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLog.h; sourceTree = "<group>"; };
 		0DAA563119A77E12000F71E5 /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		0DFA207C19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeSearchDataProvider.swift; sourceTree = "<group>"; };
 		7E0A2715AD284C79B0940B20 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		8211600492F04EA3B0513AFC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -192,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				0D1EC3C219A5EBAB0097263B /* YoutubeManager.swift */,
+				0DFA207C19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 			files = (
 				0D1EC3A919A5EA260097263B /* YouTubeViewController.swift in Sources */,
 				0D1EC3CB19A5EC000097263B /* JSONModelSerializer.m in Sources */,
+				0DFA207D19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift in Sources */,
 				0D1EC3BF19A5EAA10097263B /* YUUrlJSONModel.m in Sources */,
 				0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */,
 				0D1EC3BA19A5EAA10097263B /* YUSearchListJSONModel.m in Sources */,

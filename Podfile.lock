@@ -18,16 +18,19 @@ PODS:
   - AFNetworking/UIKit (2.2.4):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - AWPagedArray (0.2.0)
   - JSONModel (0.13.0)
   - youtube-ios-player-helper (0.1.1)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.2.3)
+  - AWPagedArray (~> 0.2.0)
   - JSONModel (~> 0.13.0)
   - youtube-ios-player-helper (~> 0.1.1)
 
 SPEC CHECKSUMS:
   AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
+  AWPagedArray: 2c02ef1c4be38174c40b8160492e4283352dc5b0
   JSONModel: 62ea96b49ea18a8b91ef89c249dba291d8601d82
   youtube-ios-player-helper: 53aecd0b4763a77e6890e9a7c55abb7b5c4bedea
 

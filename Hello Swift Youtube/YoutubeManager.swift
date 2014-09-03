@@ -8,6 +8,8 @@
 
 import Foundation
 
+// Singleton in Swift:  http://stackoverflow.com/questions/24024549/dispatch-once-singleton-model-in-swift
+
 let sharedYoutubeManager = YoutubeManager()
 
 class YoutubeManager {
@@ -18,6 +20,7 @@ class YoutubeManager {
     let YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/"
     let YOUTUBE_API_SEARCH = "search"
     let YOUTUBE_API_KEY = "AIzaSyAFUUlXucib_q6uw7tw_3G-s9FzHy39c8U"
+    let RESULTS_PER_PAGE: UInt = 20
     
     var sessionManager: AFHTTPSessionManager
     var requestManager: AFHTTPRequestOperationManager
@@ -27,8 +30,12 @@ class YoutubeManager {
         requestManager = AFHTTPRequestOperationManager(baseURL: NSURL(string: YOUTUBE_API_URL))
     }
     
-    func search(query: String, onSuccess: (YUSearchListJSONModel) -> Void, onError: (NSError) -> Void) {
-        var params = ["part": "id,snippet", "q": query, "type": "video", "key": YOUTUBE_API_KEY]
+    func search(query: String, pageToken: String?, onSuccess: (YUSearchListJSONModel) -> Void, onError: (NSError) -> Void) {
+        var params = ["part": "id,snippet", "q": query, "type": "video", "maxResults": String(RESULTS_PER_PAGE), "key": YOUTUBE_API_KEY]
+        
+        if (pageToken != nil) {
+            params["pageToken"] = pageToken
+        }
         
         requestManager.GET(YOUTUBE_API_SEARCH, parameters: params, clazz:YUSearchListJSONModel.classForCoder()
         , success: {(operation: AFHTTPRequestOperation!, response: AnyObject!) in

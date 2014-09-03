@@ -73,6 +73,7 @@
 		0D1EC3CC19A5EC0C0097263B /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeCell.swift; sourceTree = "<group>"; };
 		0D1EC3D119A5EE400097263B /* DLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLog.h; sourceTree = "<group>"; };
+		0D1FC40619B7886100240FF8 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		0D555EE219B779A70032BFE0 /* PagedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagedArray.h; sourceTree = "<group>"; };
 		0D555EE319B779A70032BFE0 /* PagedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagedArray.m; sourceTree = "<group>"; };
 		0DAA563119A77E12000F71E5 /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +133,7 @@
 				0D1EC38E19A5E7BE0097263B /* Main.storyboard */,
 				0D1EC39119A5E7BE0097263B /* Images.xcassets */,
 				0D1EC38819A5E7BD0097263B /* Supporting Files */,
+				0D1FC40619B7886100240FF8 /* MyPlayground.playground */,
 			);
 			path = "Hello Swift Youtube";
 			sourceTree = "<group>";

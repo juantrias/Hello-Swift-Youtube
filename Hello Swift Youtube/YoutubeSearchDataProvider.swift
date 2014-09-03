@@ -43,6 +43,13 @@ public class YoutubeSearchDataProvider: NSObject, AWPagedArrayDelegate {
     
     // MARK: - Private methods
     
+    private func loadDataForPageIfNeeded(page: UInt) {
+        if (pagedArray.pages[page] == nil && pagesWithOngoingRequests[page] == nil) {
+            loadDataForPage(page)
+            // TODO si la pagina no esta visible cancelar la request
+        }
+    }
+    
     private func loadDataForPage(page: UInt) {
         self.pagesWithOngoingRequests[page] = true
         let indexes = pagedArray.indexSetForPage(page)
@@ -73,14 +80,16 @@ public class YoutubeSearchDataProvider: NSObject, AWPagedArrayDelegate {
     // MARK: - Paged array delegate
     public func pagedArray(pagedArray: AWPagedArray!, willAccessIndex index: UInt, returnObject: AutoreleasingUnsafeMutablePointer<AnyObject?>) {
         
+        let page = pagedArray.pageForIndex(index)
         if (returnObject.memory!.isKindOfClass(NSNull)) {
-            let page = pagedArray.pageForIndex(index)
-            if (pagedArray.pages[page] == nil && pagesWithOngoingRequests[page] == nil) {
-                loadDataForPage(page)
-                // TODO si la pagina no esta visible cancelar la request
+            loadDataForPageIfNeeded(page)
+            
+        } else { // preload Next Page If Needed
+            let preloadPage = pagedArray.pageForIndex(index + YoutubeManager.sharedInstance.RESULTS_PER_PAGE)
+            if (preloadPage > page && preloadPage <= pagedArray.numberOfPages) {
+                loadDataForPageIfNeeded(preloadPage)
             }
         }
-        // else preloadNextPageIfNeededForIndex()
     }
     
 }

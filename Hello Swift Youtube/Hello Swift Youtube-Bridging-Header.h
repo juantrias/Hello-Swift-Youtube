@@ -18,6 +18,7 @@
 #import "YUThumbnailsJSONModel.h"
 #import "YUUrlJSONModel.h"
 #import "YUPageInfoJSONModel.h"
+#import "ErrorUIHelper.h"
 
 // Util classes. Release as Pods soon
 // AFNetworking+JSONModel

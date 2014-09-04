@@ -24,6 +24,7 @@
 		0D1EC3CB19A5EC000097263B /* JSONModelSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3C919A5EC000097263B /* JSONModelSerializer.m */; };
 		0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CC19A5EC0C0097263B /* Regex.swift */; };
 		0D1EC3D019A5EE080097263B /* YouTubeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */; };
+		0D1FC40919B78B1B00240FF8 /* ErrorUIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */; };
 		0D555EE419B779A70032BFE0 /* PagedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D555EE319B779A70032BFE0 /* PagedArray.m */; };
 		0DAA563219A77E12000F71E5 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA563119A77E12000F71E5 /* VideoViewController.swift */; };
 		0DFA207D19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA207C19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift */; };
@@ -74,6 +75,8 @@
 		0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeCell.swift; sourceTree = "<group>"; };
 		0D1EC3D119A5EE400097263B /* DLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLog.h; sourceTree = "<group>"; };
 		0D1FC40619B7886100240FF8 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
+		0D1FC40719B78B1B00240FF8 /* ErrorUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorUIHelper.h; sourceTree = "<group>"; };
+		0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorUIHelper.m; sourceTree = "<group>"; };
 		0D555EE219B779A70032BFE0 /* PagedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagedArray.h; sourceTree = "<group>"; };
 		0D555EE319B779A70032BFE0 /* PagedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagedArray.m; sourceTree = "<group>"; };
 		0DAA563119A77E12000F71E5 /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
@@ -207,6 +210,8 @@
 		0D1EC3C419A5EBE10097263B /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				0D1FC40719B78B1B00240FF8 /* ErrorUIHelper.h */,
+				0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */,
 				0D1EC3C519A5EBF30097263B /* AFNetworking+JSONModel */,
 				0D1EC3CC19A5EC0C0097263B /* Regex.swift */,
 				0D555EE219B779A70032BFE0 /* PagedArray.h */,
@@ -384,6 +389,7 @@
 				0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */,
 				0D1EC3BA19A5EAA10097263B /* YUSearchListJSONModel.m in Sources */,
 				0D1EC3BE19A5EAA10097263B /* YUThumbnailsJSONModel.m in Sources */,
+				0D1FC40919B78B1B00240FF8 /* ErrorUIHelper.m in Sources */,
 				0D1EC3C019A5EAA10097263B /* YUPageInfoJSONModel.m in Sources */,
 				0D1EC38B19A5E7BE0097263B /* AppDelegate.swift in Sources */,
 				0DAA563219A77E12000F71E5 /* VideoViewController.swift in Sources */,

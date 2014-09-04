@@ -70,8 +70,9 @@ public class YoutubeSearchDataProvider: NSObject, PagedArrayDelegate {
                 println("YoutubeManager search onSuccess for page \(page)")
             }
             , onError: { (error: NSError) -> Void in
-                // We need to assign the value returned by pagesWithOngoingRequests to bypass the compiler error
-                let aux = self.pagesWithOngoingRequests.removeValueForKey(page)
+                self.pagesWithOngoingRequests.removeValueForKey(page)
+                let alertView = ErrorUIHelper.alertViewForError(error)
+                alertView.show()
             }
         )
         

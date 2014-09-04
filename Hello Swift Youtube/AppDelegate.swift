@@ -12,7 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
                             
     var window: UIWindow?
-
+    var numberOfCallsToSetVisible = 0
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
         // Override point for customization after application launch.
@@ -41,6 +41,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    // MARK: - Custom methods
+    
+    func setNetworkActivityIndicatorVisible(visible: Bool) {
+        if (visible) {
+            numberOfCallsToSetVisible++
+        } else if (numberOfCallsToSetVisible > 0) {
+            numberOfCallsToSetVisible--
+        }
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = numberOfCallsToSetVisible > 0
+    }
 
 }
 

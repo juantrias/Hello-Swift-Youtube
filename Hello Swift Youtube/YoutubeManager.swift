@@ -37,15 +37,20 @@ class YoutubeManager {
             params["pageToken"] = pageToken
         }
         
+        var appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        appDelegate.setNetworkActivityIndicatorVisible(true)
+        
         requestManager.GET(YOUTUBE_API_SEARCH, parameters: params, clazz:YUSearchListJSONModel.classForCoder()
         , success: {(operation: AFHTTPRequestOperation!, response: AnyObject!) in
             let searchListJSONModel = response as YUSearchListJSONModel
             //println("searchListJSONModel: \(searchListJSONModel)")
+            appDelegate.setNetworkActivityIndicatorVisible(false)
             onSuccess(searchListJSONModel)
         }
         , failure: {(operation: AFHTTPRequestOperation!, error: NSError!) in
             println("Error received \(error)")
             println("Operation \(operation.request)")
+            appDelegate.setNetworkActivityIndicatorVisible(false)
             onError(error)
         })
     }

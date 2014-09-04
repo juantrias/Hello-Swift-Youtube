@@ -59,7 +59,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
                 println("YoutubeManager search onSuccess")  // \(self.searchListJSONModel)")
             }
             , onError: { (error: NSError) in
-                // TODO alert view
+                let alertView = ErrorUIHelper.alertViewForError(error)
+                alertView.show()
         })
     }
     

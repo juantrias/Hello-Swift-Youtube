@@ -36,13 +36,13 @@
     
     NSData *validatedData = [super responseObjectForResponse:response data:data error:error];
     if (*error) {
-        DLog(@"%@", *error);
+        NSLog(@"%@", *error);
         return validatedData;
     }
     
     JSONModel *jsonModel = [[self.clazz alloc] initWithData:validatedData error:error];
     if (*error) {
-        DLog(@"%@", *error);
+        NSLog(@"%@", *error);
         return validatedData;
     }
     

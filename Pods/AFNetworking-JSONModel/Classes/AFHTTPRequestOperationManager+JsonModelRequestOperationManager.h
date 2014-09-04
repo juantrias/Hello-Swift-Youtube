@@ -1,15 +1,14 @@
 //
-//  AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.h
-//  KAI01
+//  AFHTTPRequestOperationManager+JsonModelRequestOperationManager.h
 //
 //  Created by Juan on 25/04/14.
 //  Copyright (c) 2014 Intelygenz. All rights reserved.
 //
 
 #import "AFHTTPRequestOperationManager.h"
-#import "DLog.h"
+#import "JSONModelSerializer.h"
 
-@interface AFHTTPRequestOperationManager (IGZJsonModelRequestOperationManager)
+@interface AFHTTPRequestOperationManager (JsonModelRequestOperationManager)
 
 - (AFHTTPRequestOperation *)GET:(NSString *)URLString
                      parameters:(id)parameters

@@ -6,6 +6,9 @@ PODS:
     - AFNetworking/Security
     - AFNetworking/Serialization
     - AFNetworking/UIKit
+  - AFNetworking-JSONModel (0.0.1):
+    - AFNetworking (~> 2.2.0)
+    - JSONModel (~> 0.13.0)
   - AFNetworking/NSURLConnection (2.2.4):
     - AFNetworking/Reachability
     - AFNetworking/Security
@@ -22,12 +25,17 @@ PODS:
   - youtube-ios-player-helper (0.1.1)
 
 DEPENDENCIES:
-  - AFNetworking (~> 2.2.3)
-  - JSONModel (~> 0.13.0)
+  - AFNetworking-JSONModel (from `https://github.com/IGZjuantrias/AFNetworking-JSONModel.git`, tag `0.0.1`)
   - youtube-ios-player-helper (~> 0.1.1)
+
+EXTERNAL SOURCES:
+  AFNetworking-JSONModel:
+    :git: https://github.com/IGZjuantrias/AFNetworking-JSONModel.git
+    :tag: 0.0.1
 
 SPEC CHECKSUMS:
   AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
+  AFNetworking-JSONModel: 4fa9d7323aa3f0c1a2da08f8921c7b5bd5a6c91e
   JSONModel: 62ea96b49ea18a8b91ef89c249dba291d8601d82
   youtube-ios-player-helper: 53aecd0b4763a77e6890e9a7c55abb7b5c4bedea
 

@@ -20,8 +20,6 @@
 		0D1EC3BF19A5EAA10097263B /* YUUrlJSONModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3B719A5EAA10097263B /* YUUrlJSONModel.m */; };
 		0D1EC3C019A5EAA10097263B /* YUPageInfoJSONModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3B919A5EAA10097263B /* YUPageInfoJSONModel.m */; };
 		0D1EC3C319A5EBAB0097263B /* YoutubeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3C219A5EBAB0097263B /* YoutubeManager.swift */; };
-		0D1EC3CA19A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3C719A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.m */; };
-		0D1EC3CB19A5EC000097263B /* JSONModelSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3C919A5EC000097263B /* JSONModelSerializer.m */; };
 		0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CC19A5EC0C0097263B /* Regex.swift */; };
 		0D1EC3D019A5EE080097263B /* YouTubeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */; };
 		0D1FC40919B78B1B00240FF8 /* ErrorUIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */; };
@@ -67,10 +65,6 @@
 		0D1EC3B819A5EAA10097263B /* YUPageInfoJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUPageInfoJSONModel.h; sourceTree = "<group>"; };
 		0D1EC3B919A5EAA10097263B /* YUPageInfoJSONModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YUPageInfoJSONModel.m; sourceTree = "<group>"; };
 		0D1EC3C219A5EBAB0097263B /* YoutubeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeManager.swift; sourceTree = "<group>"; };
-		0D1EC3C619A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.h"; sourceTree = "<group>"; };
-		0D1EC3C719A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.m"; sourceTree = "<group>"; };
-		0D1EC3C819A5EC000097263B /* JSONModelSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONModelSerializer.h; sourceTree = "<group>"; };
-		0D1EC3C919A5EC000097263B /* JSONModelSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONModelSerializer.m; sourceTree = "<group>"; };
 		0D1EC3CC19A5EC0C0097263B /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeCell.swift; sourceTree = "<group>"; };
 		0D1EC3D119A5EE400097263B /* DLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLog.h; sourceTree = "<group>"; };
@@ -212,23 +206,11 @@
 			children = (
 				0D1FC40719B78B1B00240FF8 /* ErrorUIHelper.h */,
 				0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */,
-				0D1EC3C519A5EBF30097263B /* AFNetworking+JSONModel */,
 				0D1EC3CC19A5EC0C0097263B /* Regex.swift */,
 				0D555EE219B779A70032BFE0 /* PagedArray.h */,
 				0D555EE319B779A70032BFE0 /* PagedArray.m */,
 			);
 			name = Util;
-			sourceTree = "<group>";
-		};
-		0D1EC3C519A5EBF30097263B /* AFNetworking+JSONModel */ = {
-			isa = PBXGroup;
-			children = (
-				0D1EC3C619A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.h */,
-				0D1EC3C719A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.m */,
-				0D1EC3C819A5EC000097263B /* JSONModelSerializer.h */,
-				0D1EC3C919A5EC000097263B /* JSONModelSerializer.m */,
-			);
-			name = "AFNetworking+JSONModel";
 			sourceTree = "<group>";
 		};
 		0D1EC3CE19A5EDF40097263B /* Cells */ = {
@@ -383,7 +365,6 @@
 			files = (
 				0D1EC3A919A5EA260097263B /* YouTubeViewController.swift in Sources */,
 				0D555EE419B779A70032BFE0 /* PagedArray.m in Sources */,
-				0D1EC3CB19A5EC000097263B /* JSONModelSerializer.m in Sources */,
 				0DFA207D19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift in Sources */,
 				0D1EC3BF19A5EAA10097263B /* YUUrlJSONModel.m in Sources */,
 				0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */,
@@ -398,7 +379,6 @@
 				0D1EC3BD19A5EAA10097263B /* YUSnippetJSONModel.m in Sources */,
 				0D1EC3C319A5EBAB0097263B /* YoutubeManager.swift in Sources */,
 				0D1EC3D019A5EE080097263B /* YouTubeCell.swift in Sources */,
-				0D1EC3CA19A5EC000097263B /* AFHTTPRequestOperationManager+IGZJsonModelRequestOperationManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

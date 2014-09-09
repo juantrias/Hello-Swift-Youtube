@@ -16,6 +16,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
         // Override point for customization after application launch.
+        
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        println("NSUserDefaults path: \(paths[0])/Preferences")
+        //println("NSUserDefaults allKeys:\(NSUserDefaults.standardUserDefaults().dictionaryRepresentation())")
+        
+        // MARK: DEBUG Reset preferences on every launch
+        /*let def = NSUserDefaults.standardUserDefaults()
+        def.removeObjectForKey(SP_KEY_LAST_SEARCH_STRING)
+        def.removeObjectForKey(SP_KEY_LAST_CACHED_SEARCH_STRING)
+        def.removeObjectForKey(SP_KEY_LAST_SEARCH_RESULT_COUNT)
+        def.synchronize()
+        println(">>>>>>>DEBUG<<<<<<< NSUserDefaults deleted")
+        
+        def.setObject("Google IO 2014", forKey:SP_KEY_LAST_SEARCH_STRING)
+        def.synchronize()*/
+        
         return true
     }
 

@@ -30,20 +30,24 @@ class YoutubeManager {
         requestManager = AFHTTPRequestOperationManager(baseURL: NSURL(string: YOUTUBE_API_URL))
     }
     
+    // Como definimos el callback cuando se han guardado los datos en el Realm? Come gestionamos la paginacion con el Realm?
+    
     func search(query: String, pageToken: String?, onSuccess: (YUSearchListJSONModel) -> Void, onError: (NSError) -> Void) {
+        
         var params = ["part": "id,snippet", "q": query, "type": "video", "maxResults": String(RESULTS_PER_PAGE), "key": YOUTUBE_API_KEY]
         
         if (pageToken != nil) {
             params["pageToken"] = pageToken
         }
         
-        var appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         appDelegate.setNetworkActivityIndicatorVisible(true)
         
         requestManager.GET(YOUTUBE_API_SEARCH, parameters: params, clazz:YUSearchListJSONModel.classForCoder()
         , success: {(operation: AFHTTPRequestOperation!, response: AnyObject!) in
             let searchListJSONModel = response as YUSearchListJSONModel
             //println("searchListJSONModel: \(searchListJSONModel)")
+            
             appDelegate.setNetworkActivityIndicatorVisible(false)
             onSuccess(searchListJSONModel)
         }

@@ -10,7 +10,7 @@ import UIKit
 
 class VideoViewController: UIViewController {
 
-    var itemJSONModel: YUItemJSONModel? = nil
+    var videoDto: VideoDto? = nil
     
     @IBOutlet var playerView: YTPlayerView!
     
@@ -19,7 +19,7 @@ class VideoViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        playerView.loadWithVideoId(itemJSONModel!.id.videoId)
+        playerView.loadWithVideoId(videoDto!.videoId)
     }
 
     override func didReceiveMemoryWarning() {

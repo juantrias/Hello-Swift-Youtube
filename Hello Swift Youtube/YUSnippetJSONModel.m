@@ -10,4 +10,9 @@
 
 @implementation YUSnippetJSONModel
 
++(JSONKeyMapper*)keyMapper
+{
+    return [[JSONKeyMapper alloc] initWithDictionary:@{@"description": @"descr"}];
+}
+            
 @end

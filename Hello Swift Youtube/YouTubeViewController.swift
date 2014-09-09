@@ -12,12 +12,11 @@ let reuseIdentifier = "YouTubeVideoCell"
 
 class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, YoutubeSearchDataProviderDelegate {
 
-    let SP_KEY_LAST_SEARCH_STRING = "last-search-string"
-    
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
     
     var youtubeSearchDataProvider: YoutubeSearchDataProvider? = nil
+    var reloadAllVideos = true // Reload the entire Collection View the next time dataProvider.didLoadDataAtIndexes() is called
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +28,10 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         //self.collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
+        
+        self.youtubeSearchDataProvider = YoutubeSearchDataProvider(delegate: self)
+        
+        println("Realm video count \(VideoDto.allObjects().count)")
         
         let lastSearchString = NSUserDefaults.standardUserDefaults().stringForKey(SP_KEY_LAST_SEARCH_STRING)
         if (lastSearchString != nil) {
@@ -46,22 +49,17 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         NSUserDefaults.standardUserDefaults().setObject(searchString, forKey: SP_KEY_LAST_SEARCH_STRING)
         
-        // La primera llamada al YoutubeManager la hace el VC, cuando recibe la respuesta con el total de resultados instancia el YoutubeSearchDataProvider con el dataCount, que a su vez inicializa el AWPagedArray que requiere un dataCount
-        
-        YoutubeManager.sharedInstance.search(searchString, pageToken: nil
-            , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) in
-               
-                // TODO instanciar un DataProvider cada vez que hago una busqueda?
-                self.youtubeSearchDataProvider = YoutubeSearchDataProvider(searchString: searchString, dataCount: searchListJSONModel.pageInfo.totalResults, initialObjects: searchListJSONModel.items, nextPageToken:searchListJSONModel.nextPageToken, delegate: self)
-                
-                self.collectionView.reloadData()
-                
-                println("YoutubeManager search onSuccess")  // \(self.searchListJSONModel)")
-            }
-            , onError: { (error: NSError) in
-                let alertView = ErrorUIHelper.alertViewForError(error)
-                alertView.show()
+        self.youtubeSearchDataProvider?.search(searchString, onSuccess: { (videos) -> Void in
+            
+            //self.collectionView.reloadData()
+            self.reloadAllVideos = true
+            println("Search onSuccess")
+            
+        }, onError: { (error) -> Void in
+            let alertView = ErrorUIHelper.alertViewForError(error)
+            alertView.show()
         })
+        
     }
     
     // MARK: - Navigation
@@ -73,7 +71,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         let videoVC: VideoViewController = segue.destinationViewController as VideoViewController
         var indexPath: NSIndexPath = self.collectionView.indexPathsForSelectedItems()[0] as NSIndexPath
-        videoVC.itemJSONModel = youtubeSearchDataProvider!.dataObjects.objectAtIndex(UInt(indexPath.row)) as YUItemJSONModel
+        videoVC.videoDto = youtubeSearchDataProvider!.itemAtIndex(UInt(indexPath.row))
     }
     
     // MARK: - UICollectionViewDataSource
@@ -85,7 +83,9 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
 
     func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
         if (youtubeSearchDataProvider != nil) {
-            return Int(youtubeSearchDataProvider!.dataObjects.count())
+            let itemCount = youtubeSearchDataProvider!.itemCount()
+            println("numberOfItemsInSection \(itemCount)")
+            return itemCount
         } else {
             return 0
         }
@@ -97,14 +97,14 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         // Configure the cell
         if (youtubeSearchDataProvider != nil) {
-            let dataObject: AnyObject! = youtubeSearchDataProvider!.dataObjects.objectAtIndex(UInt(indexPath.row))
-            if (dataObject.isKindOfClass(NSNull.classForCoder())) {
+            let dataObject: AnyObject? = youtubeSearchDataProvider!.itemAtIndex(UInt(indexPath.row))
+            if (dataObject == nil) {
                 cell.titleLabel.text = nil
                 cell.thumbImageView.image = UIImage(named: "icon_video")
             } else {
-                let item = dataObject as YUItemJSONModel
-                cell.titleLabel.text = item.snippet.title
-                cell.thumbImageView.setImageWithURL(NSURL(string: item.snippet.thumbnails.defaultThumb.url))
+                let videoDto = dataObject as VideoDto
+                cell.titleLabel.text = videoDto.title
+                cell.thumbImageView.setImageWithURL(NSURL(string: videoDto.thumbnail))
             }
         }
         
@@ -145,18 +145,27 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     // MARK: - YoutubeSearchDataProviderDelegate
     
     func dataProvider(dataProvider: YoutubeSearchDataProvider, didLoadDataAtIndexes indexes: NSIndexSet) {
-        var indexPathsToReload = [NSIndexPath]()
-        indexes.enumerateIndexesUsingBlock { (idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-            
-            let indexPath = NSIndexPath(forRow: idx, inSection: 0)
-            let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems() as [NSIndexPath] // ATT: the  contains function requires this casting to [NSIndexPath]
-            if (contains(visibleIndexPaths, indexPath)) {
-                indexPathsToReload.append(indexPath)
-            }
-        }
         
-        if (indexPathsToReload.count > 0) {
-            self.collectionView.reloadItemsAtIndexPaths(indexPathsToReload)
+        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems() as [NSIndexPath] // ATT: the  contains function requires this casting to [NSIndexPath]
+        
+        // If no visible cells (ie first load) reload all the collectionView. In other case reload only the visible cells
+        if (self.reloadAllVideos || visibleIndexPaths.count == 0) {
+            self.collectionView.reloadData()
+            self.reloadAllVideos = false
+        
+        } else {
+            var indexPathsToReload = [NSIndexPath]()
+            indexes.enumerateIndexesUsingBlock { (idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                
+                let indexPath = NSIndexPath(forRow: idx, inSection: 0)
+                if (contains(visibleIndexPaths, indexPath)) {
+                    indexPathsToReload.append(indexPath)
+                }
+            }
+            
+            if (indexPathsToReload.count > 0) {
+                self.collectionView.reloadItemsAtIndexPaths(indexPathsToReload)
+            }
         }
         
     }
@@ -164,15 +173,20 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     // MARK: - UISearchBarDelegate
     
     func searchBar(searchBar: UISearchBar!, textDidChange searchText: String!) {
-        println("textDidChange \(searchText)")
+        //println("textDidChange \(searchText)")
         if (countElements(searchText) >= 3) {
             let delay = 0.1 // seconds
             // TODO cancel previous search
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+            /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
                 self.searchVideos(searchText)
-            })
+            })*/
         }
         
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar!) {
+        println("search \(searchBar.text)")
+        self.searchVideos(searchBar.text)
     }
 
 }

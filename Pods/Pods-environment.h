@@ -60,6 +60,18 @@
 #define COCOAPODS_VERSION_MINOR_JSONModel 13
 #define COCOAPODS_VERSION_PATCH_JSONModel 0
 
+// Realm
+#define COCOAPODS_POD_AVAILABLE_Realm
+#define COCOAPODS_VERSION_MAJOR_Realm 0
+#define COCOAPODS_VERSION_MINOR_Realm 84
+#define COCOAPODS_VERSION_PATCH_Realm 0
+
+// Realm/Headers
+#define COCOAPODS_POD_AVAILABLE_Realm_Headers
+#define COCOAPODS_VERSION_MAJOR_Realm_Headers 0
+#define COCOAPODS_VERSION_MINOR_Realm_Headers 84
+#define COCOAPODS_VERSION_PATCH_Realm_Headers 0
+
 // youtube-ios-player-helper
 #define COCOAPODS_POD_AVAILABLE_youtube_ios_player_helper
 #define COCOAPODS_VERSION_MAJOR_youtube_ios_player_helper 0

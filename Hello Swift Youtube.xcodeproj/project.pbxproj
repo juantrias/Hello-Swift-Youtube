@@ -23,8 +23,12 @@
 		0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CC19A5EC0C0097263B /* Regex.swift */; };
 		0D1EC3D019A5EE080097263B /* YouTubeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */; };
 		0D1FC40919B78B1B00240FF8 /* ErrorUIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */; };
-		0D555EE419B779A70032BFE0 /* PagedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D555EE319B779A70032BFE0 /* PagedArray.m */; };
+		0D3A8B1319B8ECE100969930 /* VideoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A8B1219B8ECE100969930 /* VideoDto.swift */; };
+		0D3A8B1519B8FA4500969930 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A8B1419B8FA4500969930 /* RealmHelper.swift */; };
+		0D3A8B1719B9D5A200969930 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A8B1619B9D5A200969930 /* Globals.swift */; };
+		0D3A8B1A19BDA30A00969930 /* PagedScrollHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3A8B1919BDA30A00969930 /* PagedScrollHelper.m */; };
 		0DAA563219A77E12000F71E5 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA563119A77E12000F71E5 /* VideoViewController.swift */; };
+		0DF6861F19BF42BC000C3152 /* NSUserDefaults+SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF6861E19BF42BC000C3152 /* NSUserDefaults+SwiftExtensions.swift */; };
 		0DFA207D19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA207C19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift */; };
 		6238B6E29E5A4670BBB74B5F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8211600492F04EA3B0513AFC /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -71,9 +75,13 @@
 		0D1FC40619B7886100240FF8 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		0D1FC40719B78B1B00240FF8 /* ErrorUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorUIHelper.h; sourceTree = "<group>"; };
 		0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorUIHelper.m; sourceTree = "<group>"; };
-		0D555EE219B779A70032BFE0 /* PagedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagedArray.h; sourceTree = "<group>"; };
-		0D555EE319B779A70032BFE0 /* PagedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagedArray.m; sourceTree = "<group>"; };
+		0D3A8B1219B8ECE100969930 /* VideoDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDto.swift; sourceTree = "<group>"; };
+		0D3A8B1419B8FA4500969930 /* RealmHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmHelper.swift; sourceTree = "<group>"; };
+		0D3A8B1619B9D5A200969930 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		0D3A8B1819BDA30A00969930 /* PagedScrollHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagedScrollHelper.h; sourceTree = "<group>"; };
+		0D3A8B1919BDA30A00969930 /* PagedScrollHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagedScrollHelper.m; sourceTree = "<group>"; };
 		0DAA563119A77E12000F71E5 /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		0DF6861E19BF42BC000C3152 /* NSUserDefaults+SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserDefaults+SwiftExtensions.swift"; sourceTree = "<group>"; };
 		0DFA207C19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeSearchDataProvider.swift; sourceTree = "<group>"; };
 		7E0A2715AD284C79B0940B20 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		8211600492F04EA3B0513AFC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,7 +132,8 @@
 				0D1EC3A719A5E9E50097263B /* View Controllers */,
 				0D1EC3CE19A5EDF40097263B /* Cells */,
 				0D1EC3C119A5EB9B0097263B /* Manager */,
-				0D1EC3AA19A5EA6A0097263B /* Model */,
+				0D1EC3AA19A5EA6A0097263B /* JSON Model */,
+				0D3A8B0F19B8EBEA00969930 /* Realm Model */,
 				0D1EC3C419A5EBE10097263B /* Util */,
 				0D1EC38A19A5E7BD0097263B /* AppDelegate.swift */,
 				0D1EC38E19A5E7BE0097263B /* Main.storyboard */,
@@ -141,6 +150,7 @@
 				0D1EC38919A5E7BD0097263B /* Info.plist */,
 				0D1EC3AB19A5EAA10097263B /* Hello Swift Youtube-Bridging-Header.h */,
 				0D1EC3D119A5EE400097263B /* DLog.h */,
+				0D3A8B1619B9D5A200969930 /* Globals.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -171,7 +181,7 @@
 			name = "View Controllers";
 			sourceTree = "<group>";
 		};
-		0D1EC3AA19A5EA6A0097263B /* Model */ = {
+		0D1EC3AA19A5EA6A0097263B /* JSON Model */ = {
 			isa = PBXGroup;
 			children = (
 				0D1EC3AC19A5EAA10097263B /* YUSearchListJSONModel.h */,
@@ -189,7 +199,7 @@
 				0D1EC3B819A5EAA10097263B /* YUPageInfoJSONModel.h */,
 				0D1EC3B919A5EAA10097263B /* YUPageInfoJSONModel.m */,
 			);
-			name = Model;
+			name = "JSON Model";
 			sourceTree = "<group>";
 		};
 		0D1EC3C119A5EB9B0097263B /* Manager */ = {
@@ -207,8 +217,10 @@
 				0D1FC40719B78B1B00240FF8 /* ErrorUIHelper.h */,
 				0D1FC40819B78B1B00240FF8 /* ErrorUIHelper.m */,
 				0D1EC3CC19A5EC0C0097263B /* Regex.swift */,
-				0D555EE219B779A70032BFE0 /* PagedArray.h */,
-				0D555EE319B779A70032BFE0 /* PagedArray.m */,
+				0D3A8B1419B8FA4500969930 /* RealmHelper.swift */,
+				0D3A8B1819BDA30A00969930 /* PagedScrollHelper.h */,
+				0D3A8B1919BDA30A00969930 /* PagedScrollHelper.m */,
+				0DF6861E19BF42BC000C3152 /* NSUserDefaults+SwiftExtensions.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -219,6 +231,14 @@
 				0D1EC3CF19A5EE080097263B /* YouTubeCell.swift */,
 			);
 			name = Cells;
+			sourceTree = "<group>";
+		};
+		0D3A8B0F19B8EBEA00969930 /* Realm Model */ = {
+			isa = PBXGroup;
+			children = (
+				0D3A8B1219B8ECE100969930 /* VideoDto.swift */,
+			);
+			name = "Realm Model";
 			sourceTree = "<group>";
 		};
 		876411F7703D4F3387D2CA3B /* Frameworks */ = {
@@ -364,10 +384,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D1EC3A919A5EA260097263B /* YouTubeViewController.swift in Sources */,
-				0D555EE419B779A70032BFE0 /* PagedArray.m in Sources */,
+				0D3A8B1A19BDA30A00969930 /* PagedScrollHelper.m in Sources */,
+				0DF6861F19BF42BC000C3152 /* NSUserDefaults+SwiftExtensions.swift in Sources */,
+				0D3A8B1319B8ECE100969930 /* VideoDto.swift in Sources */,
 				0DFA207D19B5EE1A005CF12B /* YoutubeSearchDataProvider.swift in Sources */,
 				0D1EC3BF19A5EAA10097263B /* YUUrlJSONModel.m in Sources */,
 				0D1EC3CD19A5EC0C0097263B /* Regex.swift in Sources */,
+				0D3A8B1719B9D5A200969930 /* Globals.swift in Sources */,
 				0D1EC3BA19A5EAA10097263B /* YUSearchListJSONModel.m in Sources */,
 				0D1EC3BE19A5EAA10097263B /* YUThumbnailsJSONModel.m in Sources */,
 				0D1FC40919B78B1B00240FF8 /* ErrorUIHelper.m in Sources */,
@@ -375,6 +398,7 @@
 				0D1EC38B19A5E7BE0097263B /* AppDelegate.swift in Sources */,
 				0DAA563219A77E12000F71E5 /* VideoViewController.swift in Sources */,
 				0D1EC3BB19A5EAA10097263B /* YUItemJSONModel.m in Sources */,
+				0D3A8B1519B8FA4500969930 /* RealmHelper.swift in Sources */,
 				0D1EC3BC19A5EAA10097263B /* YUItemIdJSONModel.m in Sources */,
 				0D1EC3BD19A5EAA10097263B /* YUSnippetJSONModel.m in Sources */,
 				0D1EC3C319A5EBAB0097263B /* YoutubeManager.swift in Sources */,

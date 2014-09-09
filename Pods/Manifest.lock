@@ -22,10 +22,14 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - JSONModel (0.13.0)
+  - Realm (0.84.0):
+    - Realm/Headers
+  - Realm/Headers (0.84.0)
   - youtube-ios-player-helper (0.1.1)
 
 DEPENDENCIES:
   - AFNetworking-JSONModel (from `https://github.com/IGZjuantrias/AFNetworking-JSONModel.git`, tag `0.0.1`)
+  - Realm (~> 0.84.0)
   - youtube-ios-player-helper (~> 0.1.1)
 
 EXTERNAL SOURCES:
@@ -37,6 +41,7 @@ SPEC CHECKSUMS:
   AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
   AFNetworking-JSONModel: 4fa9d7323aa3f0c1a2da08f8921c7b5bd5a6c91e
   JSONModel: 62ea96b49ea18a8b91ef89c249dba291d8601d82
+  Realm: 097412d7bcbba45ad5037add12e0395136070d88
   youtube-ios-player-helper: 53aecd0b4763a77e6890e9a7c55abb7b5c4bedea
 
 COCOAPODS: 0.33.1

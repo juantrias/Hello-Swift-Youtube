@@ -1,0 +1,2 @@
+PODS_REALM_LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/Realm/core"
+PODS_REALM_OTHER_LDFLAGS = -lc++ -ltightdb-ios

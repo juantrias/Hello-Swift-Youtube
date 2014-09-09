@@ -10,6 +10,7 @@
 #import <JSONModel/JSONModel.h>
 #import <AFNetworking-JSONModel/AFHTTPRequestOperationManager+JsonModelRequestOperationManager.h>
 #import <youtube-ios-player-helper/YTPlayerView.h>
+#import <Realm/Realm.h>
 
 // Project ObjC classes
 #import "YUSearchListJSONModel.h"
@@ -23,4 +24,4 @@
 
 // Util classes. Release as Pods soon
 // PagedArray
-#import "PagedArray.h"
+#import "PagedScrollHelper.h"

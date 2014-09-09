@@ -49,6 +49,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         NSUserDefaults.standardUserDefaults().setObject(searchString, forKey: SP_KEY_LAST_SEARCH_STRING)
         
+        self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: true)
+        
         self.youtubeSearchDataProvider?.search(searchString, onSuccess: { (videos) -> Void in
             
             //self.collectionView.reloadData()
@@ -56,8 +58,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
             println("Search onSuccess")
             
         }, onError: { (error) -> Void in
-            let alertView = ErrorUIHelper.alertViewForError(error)
-            alertView.show()
+            /*let alertView = ErrorUIHelper.alertViewForError(error)
+            alertView.show()*/
         })
         
     }

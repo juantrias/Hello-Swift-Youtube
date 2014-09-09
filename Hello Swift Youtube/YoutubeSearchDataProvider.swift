@@ -32,7 +32,7 @@ public class YoutubeSearchDataProvider: NSObject {
         }
     }
     private var videos: RLMArray?
-    private var searchString: String? {
+    private var lastSearchString: String? {
         get {
             return NSUserDefaults.standardUserDefaults().objectForKey(SP_KEY_LAST_CACHED_SEARCH_STRING) as? String
         }
@@ -80,55 +80,61 @@ public class YoutubeSearchDataProvider: NSObject {
     public func search(searchString: String, onSuccess: (videos: [VideoDto]) -> Void, onError: (error: NSError) -> Void ) {
         
         let lastCachedSearchString = NSUserDefaults.standardUserDefaults().stringForKey(SP_KEY_LAST_CACHED_SEARCH_STRING)
-        if (lastCachedSearchString != searchString) {
-            
-            let page: UInt = 1
-            
-            // Make API call:
-            YoutubeManager.sharedInstance.search(searchString, pageToken: nil
-                , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) -> Void in
-                    
-                    self.resetSearchResults()
-                    self.searchString = searchString
-                    
-                    // Instantiate pagedScrollHelper with totalCount
-                    self.pagedScrollHelper = PagedScrollHelper(count: searchListJSONModel.pageInfo.totalResults, objectsPerPage: YoutubeManager.sharedInstance.RESULTS_PER_PAGE)
-                    
-                    self.totalVideoCount = searchListJSONModel.pageInfo.totalResults
-                    let videos = self.saveSearchResults(searchListJSONModel, page: page)
-                    
-                    self.cachedPages[String(page)] = true
-                    if (page > 1) {
-                        self.pageTokens[String(page-1)] = searchListJSONModel.prevPageToken
-                    }
-                    if (page < self.pagedScrollHelper!.numberOfPages()) {
-                        self.pageTokens[String(page+1)] = searchListJSONModel.nextPageToken
-                    }
-                    
-                    NSUserDefaults.standardUserDefaults().setDictionary(self.cachedPages, forKey:SP_KEY_LAST_SEARCH_CACHED_PAGES)
-                    NSUserDefaults.standardUserDefaults().setDictionary(self.pageTokens, forKey:SP_KEY_LAST_SEARCH_PAGE_TOKENS)
-                    NSUserDefaults.standardUserDefaults().synchronize()
-                    
-                    // Reload data at VC
-                    onSuccess(videos: videos)
-                    
-                }, onError: { (error: NSError) -> Void in
-                    onError(error: error)
-            })
-            
         
+        if (lastCachedSearchString != searchString) {
+            searchOnApi(searchString, page:1, pageToken: nil, isFirstPage: true, onSuccess:onSuccess, onError: onError)
+            
         } else {
             // Fetch data from Realm and store in PagedArray
             self.videos = VideoDto.allObjects()
             self.pagedScrollHelper = PagedScrollHelper(count: UInt(self.totalVideoCount), objectsPerPage: YoutubeManager.sharedInstance.RESULTS_PER_PAGE)
             // self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
         }
-        
-        
-        //
     }
     
     // MARK: - Private methods
+    
+    private func searchOnApi(searchString: String, page: UInt, pageToken: String?, isFirstPage: Bool, onSuccess: (videos: [VideoDto]) -> Void, onError: (error: NSError) -> Void) {
+        
+        YoutubeManager.sharedInstance.search(searchString, pageToken: pageToken
+            , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) -> Void in
+                
+                if (isFirstPage) {
+                    self.resetSearchResults()
+                    self.lastSearchString = searchString
+                    // Instantiate pagedScrollHelper with totalCount
+                    self.pagedScrollHelper = PagedScrollHelper(count: searchListJSONModel.pageInfo.totalResults, objectsPerPage: YoutubeManager.sharedInstance.RESULTS_PER_PAGE)
+                    self.totalVideoCount = searchListJSONModel.pageInfo.totalResults
+                }
+                
+                let videos = self.saveSearchResults(searchListJSONModel, page: page)
+                
+                self.pagesWithOngoingRequests.removeValueForKey(page)
+                self.cachedPages[String(page)] = true
+                if (page > 1) {
+                    self.pageTokens[String(page-1)] = searchListJSONModel.prevPageToken
+                }
+                if (page < self.pagedScrollHelper!.numberOfPages()) {
+                    self.pageTokens[String(page+1)] = searchListJSONModel.nextPageToken
+                }
+                
+                NSUserDefaults.standardUserDefaults().setDictionary(self.cachedPages, forKey:SP_KEY_LAST_SEARCH_CACHED_PAGES)
+                NSUserDefaults.standardUserDefaults().setDictionary(self.pageTokens, forKey:SP_KEY_LAST_SEARCH_PAGE_TOKENS)
+                NSUserDefaults.standardUserDefaults().synchronize()
+                
+                // Se hace desde saveSearchResults
+                //self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
+                println("YoutubeManager search onSuccess for page \(page) pageToken \(pageToken)")
+                onSuccess(videos: videos)
+            }
+            
+            , onError: { (error: NSError) -> Void in
+                self.pagesWithOngoingRequests.removeValueForKey(page)
+                let alertView = ErrorUIHelper.alertViewForError(error)
+                alertView.show()
+            }
+        )
+    }
     
     private func resetSearchResults() {
         
@@ -197,7 +203,7 @@ public class YoutubeSearchDataProvider: NSObject {
     }
     
     private func loadDataForPage(page: UInt) {
-        if (pagedScrollHelper == nil || searchString == nil) {
+        if (pagedScrollHelper == nil || lastSearchString == nil) {
             return
         }
 
@@ -206,35 +212,13 @@ public class YoutubeSearchDataProvider: NSObject {
         self.delegate.dataProvider?(self, willLoadDataAtIndexes:indexes)
         
         let pageToken = pageTokens[String(page)]
-        YoutubeManager.sharedInstance.search(searchString!, pageToken: pageToken
-            , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) -> Void in
-                
-                let videos = self.saveSearchResults(searchListJSONModel, page: page)
-                
-                self.pagesWithOngoingRequests.removeValueForKey(page)
-                self.cachedPages[String(page)] = true
-                if (page > 1) {
-                    self.pageTokens[String(page-1)] = searchListJSONModel.prevPageToken
-                }
-                if (page < self.pagedScrollHelper!.numberOfPages()) {
-                    self.pageTokens[String(page+1)] = searchListJSONModel.nextPageToken
-                }
-                
-                NSUserDefaults.standardUserDefaults().setDictionary(self.cachedPages, forKey:SP_KEY_LAST_SEARCH_CACHED_PAGES)
-                NSUserDefaults.standardUserDefaults().setDictionary(self.pageTokens, forKey:SP_KEY_LAST_SEARCH_PAGE_TOKENS)
-                NSUserDefaults.standardUserDefaults().synchronize()
-                
-                self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
-                println("YoutubeManager search onSuccess for page \(page) pageToken \(pageToken)")
-            }
-            
-            , onError: { (error: NSError) -> Void in
-                self.pagesWithOngoingRequests.removeValueForKey(page)
-                let alertView = ErrorUIHelper.alertViewForError(error)
-                alertView.show()
-            }
-        )
         
+        searchOnApi(lastSearchString!, page: page, pageToken: pageToken, isFirstPage: false
+            , onSuccess: { (videos: [VideoDto]) -> Void in
+                //Do nothing
+            }, onError: { (error: NSError) -> Void in
+                //Do nothing
+        })
     }
     
     // MARK: - Data methods

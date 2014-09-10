@@ -44,12 +44,16 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: - Private methods
 
     func searchVideos(searchString: String) {
         
         NSUserDefaults.standardUserDefaults().setObject(searchString, forKey: SP_KEY_LAST_SEARCH_STRING)
         
-        self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: true)
+        if (self.collectionView.numberOfItemsInSection(0) > 0) {
+            self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: true)
+        }
         
         self.youtubeManager?.search(searchString, onSuccess: { (videos) -> Void in
             

@@ -10,10 +10,19 @@ The aim of this project is to test some of the features of the new Swift program
 
 We use AFNetworking to make the Youtube REST API calls and JSONModel to serialize the JSON responses. To simplify the integration of these two libraries and write less error-control code we use our own tiny wrapper over some AFNetworking methods: the AFNetworking-JSONModel pod. See the YoutubeManager class.
 
-We use a paginated Collection View to display the Youtube search results. When we scroll down we request the next page of results before they appear on the screen (pre-loading). To implement the pagination we use the placeholder view technique as described in this post http://www.iosnomad.com/blog/2014/4/21/fluent-pagination. The YoutubeSearchDataProvider and PagedArray are the classes that manage the pagination.
+We store the results fetched from the Youtube REST API in a Realm (http://realm.io/) database. So if we relaunch the app we display the cached results instead of making a new REST API call.
+
+We use a paginated Collection View to display the Youtube search results. When we scroll down we request the next page of results before they appear on the screen (pre-loading). To implement the pagination we use the placeholder view technique as described in this post (http://www.iosnomad.com/blog/2014/4/21/fluent-pagination), but replacing the placeholder AWPagedArray by a RLMRealm array to cache the API results. The YoutubeManager and PagedScrollHelper are the classes that manage the pagination.
 
 ### TODO
-Cache the Youtube API results using Realm http://realm.io/
+- Improve the ViewController-Manager-ApiClient architecture: 
+  - Single responsibilities
+  - Well defined flow for callbacks (blocks or delegates to update the UI)
+  - Reusability with future services
+- Limit the memory consumption (number of results in memory) with very large datasets
+- Cancel a request for a page of results if the rows are not in the screen
+- Animate the transition when a cell is reused to display other result: we see a little abrupt transition when changing the thumbnail of a row 
+- Do not copy a Dictionary to store it on NSUserDefaults: NSUserDefaults+SwiftExtensions 
 
 ### Some Swift features tested in this project:
 - Interaction with Objective-C classes. We use the "Hello Swift Youtube-Bridging-Header.h" file to import Objective-C classes

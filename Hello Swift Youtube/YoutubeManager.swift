@@ -1,61 +1,241 @@
 //
-//  YoutubeManager.swift
-//  Hello Swift
+//  YoutubeSearchDataProvider.swift
+//  Hello Swift Youtube
 //
-//  Created by Juan on 11/07/14.
+//  Created by Juan on 02/09/14.
 //  Copyright (c) 2014 IGZ. All rights reserved.
 //
 
 import Foundation
 
-// Singleton in Swift:  http://stackoverflow.com/questions/24024549/dispatch-once-singleton-model-in-swift
+// Necesitamos marcar tanto el protocol como la class como @objc para poder declarar métodos optional
 
-let sharedYoutubeManager = YoutubeManager()
+@objc
+protocol YoutubeManagerDelegate {
+    optional func dataProvider(dataProvider: YoutubeManager, willLoadDataAtIndexes indexes:NSIndexSet)
+    func dataProvider(dataProvider: YoutubeManager, didLoadDataAtIndexes indexes:NSIndexSet)
+}
 
-class YoutubeManager {
-    class var sharedInstance:YoutubeManager {
-        return sharedYoutubeManager
+@objc
+public class YoutubeManager: NSObject {
+    
+    public let RESULTS_PER_PAGE: UInt = 20
+    
+    private var pagedScrollHelper: PagedScrollHelper?
+    private var totalVideoCount: Int {
+        get {
+            let t = NSUserDefaults.standardUserDefaults().integerForKey(SP_KEY_LAST_SEARCH_RESULT_COUNT)
+            println("get totalVideoCount \(t)")
+            return t
+        }
+        set {
+            println("set totalVideoCount \(newValue)")
+            NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: SP_KEY_LAST_SEARCH_RESULT_COUNT)
+        }
     }
-    
-    let YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/"
-    let YOUTUBE_API_SEARCH = "search"
-    let YOUTUBE_API_KEY = "AIzaSyAFUUlXucib_q6uw7tw_3G-s9FzHy39c8U"
-    let RESULTS_PER_PAGE: UInt = 20
-    
-    var sessionManager: AFHTTPSessionManager
-    var requestManager: AFHTTPRequestOperationManager
-    
-    init() {
-        sessionManager = AFHTTPSessionManager(baseURL: NSURL(string: YOUTUBE_API_URL))
-        requestManager = AFHTTPRequestOperationManager(baseURL: NSURL(string: YOUTUBE_API_URL))
+    private var videos: RLMArray?
+    private var lastSearchString: String? {
+        get {
+            return NSUserDefaults.standardUserDefaults().objectForKey(SP_KEY_LAST_CACHED_SEARCH_STRING) as? String
+        }
+        set {
+            if (newValue != nil) {
+                NSUserDefaults.standardUserDefaults().setObject(newValue!, forKey: SP_KEY_LAST_CACHED_SEARCH_STRING)
+            } else {
+                NSUserDefaults.standardUserDefaults().removeObjectForKey(SP_KEY_LAST_CACHED_SEARCH_STRING)
+            }
+        }
     }
+    private var pageTokens: [String: String] //pageNumber -> pageToken
+    private var cachedPages: [String: Bool] //pageNumber -> True
+    private var pagesWithOngoingRequests: [UInt: Bool] //pageNumber -> True
+    private var notificationToken: RLMNotificationToken?
+    private var delegate: YoutubeManagerDelegate
     
-    // Como definimos el callback cuando se han guardado los datos en el Realm? Come gestionamos la paginacion con el Realm?
-    
-    func search(query: String, pageToken: String?, onSuccess: (YUSearchListJSONModel) -> Void, onError: (NSError) -> Void) {
+    init(delegate: YoutubeManagerDelegate) {
+        self.pagesWithOngoingRequests = [UInt: Bool]()
         
-        var params = ["part": "id,snippet", "q": query, "type": "video", "maxResults": String(RESULTS_PER_PAGE), "key": YOUTUBE_API_KEY]
-        
-        if (pageToken != nil) {
-            params["pageToken"] = pageToken
+        let spPageTokens = NSUserDefaults.standardUserDefaults().objectForKey(SP_KEY_LAST_SEARCH_PAGE_TOKENS) as? [String: String]
+        println("get pageTokens: \(spPageTokens)")
+        if (spPageTokens != nil) {
+            self.pageTokens = spPageTokens!
+        } else {
+            self.pageTokens = [String: String]()
         }
         
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        appDelegate.setNetworkActivityIndicatorVisible(true)
+        let spCachedPages = NSUserDefaults.standardUserDefaults().objectForKey(SP_KEY_LAST_SEARCH_CACHED_PAGES) as? [String: Bool]
+        println("get cachedPages: \(spCachedPages)")
+        if (spCachedPages != nil) {
+            self.cachedPages = spCachedPages!
+        } else {
+            self.cachedPages = [String: Bool]()
+        }
         
-        requestManager.GET(YOUTUBE_API_SEARCH, parameters: params, clazz:YUSearchListJSONModel.classForCoder()
-        , success: {(operation: AFHTTPRequestOperation!, response: AnyObject!) in
-            let searchListJSONModel = response as YUSearchListJSONModel
-            //println("searchListJSONModel: \(searchListJSONModel)")
+        self.delegate = delegate
+        
+        // Hay alguna forma de actualizar self.videos sin volver a cargar todos los videos desde Realm?
+        self.videos = VideoDto.allObjects()
+        
+        super.init()
+    }
+    
+    // MARK: - Public methods
+    
+    public func search(searchString: String, onSuccess: (videos: [VideoDto]) -> Void, onError: (error: NSError) -> Void ) {
+        
+        let lastCachedSearchString = NSUserDefaults.standardUserDefaults().stringForKey(SP_KEY_LAST_CACHED_SEARCH_STRING)
+        
+        if (lastCachedSearchString != searchString) {
+            searchOnApi(searchString, page:1, pageToken: nil, isFirstPage: true, onSuccess:onSuccess, onError: onError)
             
-            appDelegate.setNetworkActivityIndicatorVisible(false)
-            onSuccess(searchListJSONModel)
+        } else {
+            // Fetch data from Realm and store in PagedArray
+            self.videos = VideoDto.allObjects()
+            self.pagedScrollHelper = PagedScrollHelper(count: UInt(self.totalVideoCount), objectsPerPage: RESULTS_PER_PAGE)
+            // self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
         }
-        , failure: {(operation: AFHTTPRequestOperation!, error: NSError!) in
-            println("Error received \(error)")
-            println("Operation \(operation.request)")
-            appDelegate.setNetworkActivityIndicatorVisible(false)
-            onError(error)
+    }
+    
+    public func searchResultsCount() -> Int {
+        return totalVideoCount
+    }
+    
+    public func searchResultsVideoAtIndex(index: UInt) -> VideoDto? {
+        
+        if (pagedScrollHelper == nil) {
+            return nil
+        }
+        
+        let page = pagedScrollHelper!.pageForIndex(index)
+        
+        if (videos != nil && index < videos!.count) {
+            let preloadPage = pagedScrollHelper!.pageForIndex(index + RESULTS_PER_PAGE)
+            if (preloadPage > page && preloadPage <= pagedScrollHelper!.numberOfPages()) {
+                loadDataForPageIfNeeded(preloadPage)
+            }
+            return videos![index] as? VideoDto
+            
+        } else {
+            loadDataForPageIfNeeded(page)
+            return nil
+        }
+    }
+    
+    // MARK: - Private methods
+    
+    private func resetSearchResults() {
+        
+        // Delete previous results from Realm
+        deleteAllVideos()
+        
+        self.pageTokens = [String: String]()
+        self.cachedPages = [String: Bool]()
+        self.pagesWithOngoingRequests = [UInt: Bool]()
+        
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(SP_KEY_LAST_SEARCH_PAGE_TOKENS)
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(SP_KEY_LAST_SEARCH_CACHED_PAGES)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    // MARK: - Private methods: REST API
+    
+    private func searchOnApi(searchString: String, page: UInt, pageToken: String?, isFirstPage: Bool, onSuccess: (videos: [VideoDto]) -> Void, onError: (error: NSError) -> Void) {
+        
+        YoutubeApiClient.sharedClient.search(searchString, pageToken: pageToken, resultsPerPage: RESULTS_PER_PAGE
+            , onSuccess: { (newVideos: [VideoDto], totalVideos: UInt, prevPageToken: String?, nextPageToken: String?) -> Void in
+                if (isFirstPage) {
+                    self.resetSearchResults()
+                    self.lastSearchString = searchString
+                    // Instantiate pagedScrollHelper with totalCount
+                    self.pagedScrollHelper = PagedScrollHelper(count: totalVideos, objectsPerPage: self.RESULTS_PER_PAGE)
+                    self.totalVideoCount = Int(totalVideos)
+                }
+                
+                self.saveSearchResults(newVideos, page: page)
+                
+                self.pagesWithOngoingRequests.removeValueForKey(page)
+                self.cachedPages[String(page)] = true
+
+                if (page > 1) {
+                    self.pageTokens[String(page-1)] = prevPageToken!
+                }
+                if (page < self.pagedScrollHelper!.numberOfPages()) {
+                    self.pageTokens[String(page+1)] = nextPageToken!
+                }
+                
+                NSUserDefaults.standardUserDefaults().setDictionary(self.pageTokens, forKey:SP_KEY_LAST_SEARCH_PAGE_TOKENS)
+                NSUserDefaults.standardUserDefaults().setDictionary(self.cachedPages, forKey:SP_KEY_LAST_SEARCH_CACHED_PAGES)
+                NSUserDefaults.standardUserDefaults().synchronize()
+
+                // Se hace desde saveSearchResults
+                //self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
+                println("YoutubeManager search onSuccess for page \(page) pageToken \(pageToken)")
+                onSuccess(videos: newVideos)
+                
+            }, onError: {  (error: NSError) -> Void in
+                onError(error: error)
+            })
+    }
+    
+    // MARK: - Private methods: Realm
+    
+    private func deleteAllVideos() {
+        RealmHelper.sharedHelper.writeAsync({ (realm: RLMRealm) -> Void in
+            let videos = VideoDto.allObjects()
+            realm.beginWriteTransaction()
+            realm.deleteObjects(videos)
+            realm.commitWriteTransaction()
+        })
+    }
+    
+    /**
+    Save JSON Objects to Realm
+    */
+    private func saveSearchResults(videos: [VideoDto], page: UInt) {
+        
+        RealmHelper.sharedHelper.writeAsync { (realm: RLMRealm) in
+            // This block is executed in other thread, so we obtain a RLMRealm instance for this thread
+            // From Realm docs: "Do not share RLMRealm objects across threads"
+            println("Default realm path \(realm.path)")
+            // Add all objects to the Realm inside a single transaction
+            // From Realm docs: "unless you need to make simultaneous writes from many threads at once, you should favor larger write transactions that do more work over many fine-grained write transactions"
+            realm.beginWriteTransaction()
+            realm.addObjectsFromArray(videos)
+            realm.commitWriteTransaction()
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.videos = VideoDto.allObjects()
+                let indexes = self.pagedScrollHelper!.indexSetForPage(page)
+                self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
+            })
+        }
+    }
+    
+    // MARK: - Private methods: Pagination
+    
+    private func loadDataForPageIfNeeded(page: UInt) {
+        if (cachedPages[String(page)] == nil && pagesWithOngoingRequests[page] == nil) {
+            loadDataForPage(page)
+            // TODO: si la pagina no esta visible cancelar la request
+        }
+    }
+    
+    private func loadDataForPage(page: UInt) {
+        if (pagedScrollHelper == nil || lastSearchString == nil) {
+            return
+        }
+
+        self.pagesWithOngoingRequests[page] = true
+        let indexes = pagedScrollHelper!.indexSetForPage(page)
+        self.delegate.dataProvider?(self, willLoadDataAtIndexes:indexes)
+        
+        let pageToken = pageTokens[String(page)]
+        
+        searchOnApi(lastSearchString!, page: page, pageToken: pageToken, isFirstPage: false
+            , onSuccess: { (videos: [VideoDto]) -> Void in
+                //Do nothing
+            }, onError: { (error: NSError) -> Void in
+                //Do nothing
         })
     }
     

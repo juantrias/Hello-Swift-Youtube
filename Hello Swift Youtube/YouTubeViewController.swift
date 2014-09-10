@@ -10,12 +10,12 @@ import UIKit
 
 let reuseIdentifier = "YouTubeVideoCell"
 
-class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, YoutubeSearchDataProviderDelegate {
+class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, YoutubeManagerDelegate {
 
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
     
-    var youtubeSearchDataProvider: YoutubeSearchDataProvider? = nil
+    var youtubeManager: YoutubeManager? = nil
     var reloadAllVideos = true // Reload the entire Collection View the next time dataProvider.didLoadDataAtIndexes() is called
     
     override func viewDidLoad() {
@@ -29,7 +29,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
 
         // Do any additional setup after loading the view.
         
-        self.youtubeSearchDataProvider = YoutubeSearchDataProvider(delegate: self)
+        self.youtubeManager = YoutubeManager(delegate: self)
         
         println("Realm video count \(VideoDto.allObjects().count)")
         
@@ -51,15 +51,15 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: true)
         
-        self.youtubeSearchDataProvider?.search(searchString, onSuccess: { (videos) -> Void in
+        self.youtubeManager?.search(searchString, onSuccess: { (videos) -> Void in
             
             //self.collectionView.reloadData()
             self.reloadAllVideos = true
             println("Search onSuccess")
             
         }, onError: { (error) -> Void in
-            /*let alertView = ErrorUIHelper.alertViewForError(error)
-            alertView.show()*/
+            let alertView = ErrorUIHelper.alertViewForError(error)
+            alertView.show()
         })
         
     }
@@ -73,7 +73,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         let videoVC: VideoViewController = segue.destinationViewController as VideoViewController
         var indexPath: NSIndexPath = self.collectionView.indexPathsForSelectedItems()[0] as NSIndexPath
-        videoVC.videoDto = youtubeSearchDataProvider!.itemAtIndex(UInt(indexPath.row))
+        videoVC.videoDto = youtubeManager!.searchResultsVideoAtIndex(UInt(indexPath.row))
     }
     
     // MARK: - UICollectionViewDataSource
@@ -84,10 +84,10 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }*/
 
     func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
-        if (youtubeSearchDataProvider != nil) {
-            let itemCount = youtubeSearchDataProvider!.itemCount()
-            println("numberOfItemsInSection \(itemCount)")
-            return itemCount
+        if (youtubeManager != nil) {
+            let searchResultsCount = youtubeManager!.searchResultsCount()
+            println("numberOfItemsInSection \(searchResultsCount)")
+            return searchResultsCount
         } else {
             return 0
         }
@@ -98,8 +98,8 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as YouTubeCell
         
         // Configure the cell
-        if (youtubeSearchDataProvider != nil) {
-            let dataObject: AnyObject? = youtubeSearchDataProvider!.itemAtIndex(UInt(indexPath.row))
+        if (youtubeManager != nil) {
+            let dataObject: AnyObject? = youtubeManager!.searchResultsVideoAtIndex(UInt(indexPath.row))
             if (dataObject == nil) {
                 cell.titleLabel.text = nil
                 cell.thumbImageView.image = UIImage(named: "icon_video")
@@ -144,9 +144,9 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     */
     
-    // MARK: - YoutubeSearchDataProviderDelegate
+    // MARK: - YoutubeManagerDelegate
     
-    func dataProvider(dataProvider: YoutubeSearchDataProvider, didLoadDataAtIndexes indexes: NSIndexSet) {
+    func dataProvider(dataProvider: YoutubeManager, didLoadDataAtIndexes indexes: NSIndexSet) {
         
         let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems() as [NSIndexPath] // ATT: the  contains function requires this casting to [NSIndexPath]
         

@@ -40,3 +40,24 @@ We use a paginated Collection View to display the Youtube search results. When w
 
 ### Swift libraries catalog
 http://www.swifttoolbox.io/
+
+### Architecture review
+We are looking for a robust architecture to implement the typical stack in a native app, from the View Controller down to the REST API call, including a local storage to cache the results and enable offline access. If the API makes it possible, we want to integrate also paginated scroll support when dealing with large datasets. This is only a draft tested partially on real projects. This are the layers:
+
+- View
+- ViewController
+- Manager
+  - Decide if we fetch the results from the Local Storage or from the REST API (cache expiration, local data synchronization and so on...)
+  - Save the results returned by the ApiClient in the Local Storage
+  - Perform the business logic (ie validating an object before POSTing it to the REST API)
+  - Return meaningful errors to the ViewControllers (do not change drectly the UI of course)
+- Local Storage: Realm, CoreData (backed by SQLite or other storage engine), raw SQLite...
+- ApiClient
+  - Translate API objects (serialized & validated JSON objects) to DTOs (the data objects we use in the UI). In our case JSONModel objects to Realm objects. We can also define the serialized objects and the DTOs as the same thing or use some kind of automatic mapping.
+  - Validate API responses (NOTE: for automatic required-fields validation we can rely on a parsing library like JSONModel)
+  - Handle Api Errors
+  - Manage results pagination if needed
+  - Append user credentials to the request if needed (ie OAuth Access Token)
+  
+
+- Networking & Parsing libraries

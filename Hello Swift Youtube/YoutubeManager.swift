@@ -12,8 +12,9 @@ import Foundation
 
 @objc
 protocol YoutubeManagerDelegate {
-    optional func dataProvider(dataProvider: YoutubeManager, willLoadDataAtIndexes indexes:NSIndexSet)
-    func dataProvider(dataProvider: YoutubeManager, didLoadDataAtIndexes indexes:NSIndexSet)
+    optional func manager(manager: YoutubeManager, willLoadDataAtIndexes indexes:NSIndexSet)
+    func manager(manager: YoutubeManager, didLoadDataAtIndexes indexes:NSIndexSet)
+    func manager(manager: YoutubeManager, errorLoadingDataAtIndexes indexes:NSIndexSet, error: NSError)
 }
 
 @objc
@@ -206,7 +207,7 @@ public class YoutubeManager: NSObject {
             dispatch_async(dispatch_get_main_queue(), {
                 self.videos = VideoDto.allObjects()
                 let indexes = self.pagedScrollHelper!.indexSetForPage(page)
-                self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
+                self.delegate.manager(self, didLoadDataAtIndexes: indexes)
             })
         }
     }
@@ -227,15 +228,15 @@ public class YoutubeManager: NSObject {
 
         self.pagesWithOngoingRequests[page] = true
         let indexes = pagedScrollHelper!.indexSetForPage(page)
-        self.delegate.dataProvider?(self, willLoadDataAtIndexes:indexes)
+        self.delegate.manager?(self, willLoadDataAtIndexes:indexes)
         
         let pageToken = pageTokens[String(page)]
         
         searchOnApi(lastSearchString!, page: page, pageToken: pageToken, isFirstPage: false
             , onSuccess: { (videos: [VideoDto]) -> Void in
-                //Do nothing
+                //Do nothing. The UI is notified only after Realm updated (at saveSearchResults())
             }, onError: { (error: NSError) -> Void in
-                //Do nothing
+                self.delegate.manager(self, errorLoadingDataAtIndexes: indexes, error: error)
         })
     }
     

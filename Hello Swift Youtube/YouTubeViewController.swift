@@ -150,7 +150,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
     
     // MARK: - YoutubeManagerDelegate
     
-    func dataProvider(dataProvider: YoutubeManager, didLoadDataAtIndexes indexes: NSIndexSet) {
+    func manager(manager: YoutubeManager, didLoadDataAtIndexes indexes: NSIndexSet) {
         
         let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems() as [NSIndexPath] // ATT: the  contains function requires this casting to [NSIndexPath]
         
@@ -173,7 +173,11 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
                 self.collectionView.reloadItemsAtIndexPaths(indexPathsToReload)
             }
         }
-        
+    }
+    
+    func manager(manager: YoutubeManager, errorLoadingDataAtIndexes indexes: NSIndexSet, error: NSError) {
+        let alertView = ErrorUIHelper.alertViewForError(error)
+        alertView.show()
     }
     
     // MARK: - UISearchBarDelegate

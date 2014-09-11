@@ -8,7 +8,7 @@ The aim of this project is to test some of the features of the new Swift program
 - A Collection View of Youtube videos with a Search bar to search videos through the Youtube REST API.
 - A Video view to play the selected video with the youtube-ios-player-helper lib (based on a WebView)
 
-We use AFNetworking to make the Youtube REST API calls and JSONModel to serialize the JSON responses. To simplify the integration of these two libraries and write less error-control code we use our own tiny wrapper over some AFNetworking methods: the AFNetworking-JSONModel pod. See the YoutubeManager class.
+We use AFNetworking to make the Youtube REST API calls and JSONModel to serialize the JSON responses. To simplify the integration of these two libraries and write less error-control code we use our own tiny AFNetworking extension: the AFNetworking-JSONModel pod. See the YoutubeApiClient class.
 
 We store the results fetched from the Youtube REST API in a Realm (http://realm.io/) database. So if we relaunch the app we display the cached results instead of making a new REST API call.
 
@@ -58,6 +58,4 @@ We are looking for a robust architecture to implement the typical stack in a nat
   - Handle Api Errors
   - Manage results pagination if needed
   - Append user credentials to the request if needed (ie OAuth Access Token)
-  
-
-- Networking & Parsing libraries
+- Networking & Parsing libraries: In our case AFNetworking for the HTTP stuff & JSONModel for parsing and automatic required fields validation. In every service we pass to AFNetworking and JSONModel the JSONModel class we expect to receive as the API response. Any other response is automatically redirected to the same error callback we use for networking errors, so we move away the JSON structure error control code from every ApiClient service, making it generic. We have implemented this logic in our own tiny AFNetworking extension: the AFNetworking-JSONModel pod. See the YoutubeApiClient class

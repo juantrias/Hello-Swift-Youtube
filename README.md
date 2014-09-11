@@ -44,6 +44,8 @@ http://www.swifttoolbox.io/
 ### Architecture review
 We are looking for a robust architecture to implement the typical stack in a native app, from the View Controller down to the REST API call, including a local storage to cache the results and enable offline access. If the API makes it possible, we want to integrate also paginated scroll support when dealing with large datasets. This is only a draft tested partially on real projects. This are the layers:
 
+![Architecture schema](https://github.com/IGZjuantrias/Hello-Swift-Youtube/blob/master/Doc/REST-Storage-View_Architecture.png)
+
 - View
 - ViewController
 - Manager

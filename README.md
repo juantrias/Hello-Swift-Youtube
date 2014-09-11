@@ -14,16 +14,6 @@ We store the results fetched from the Youtube REST API in a Realm (http://realm.
 
 We use a paginated Collection View to display the Youtube search results. When we scroll down we request the next page of results before they appear on the screen (pre-loading). To implement the pagination we use the placeholder view technique as described in this post (http://www.iosnomad.com/blog/2014/4/21/fluent-pagination), but replacing the placeholder AWPagedArray by a RLMRealm array to cache the API results. The YoutubeManager and PagedScrollHelper are the classes that manage the pagination.
 
-### TODO
-- Improve the ViewController-Manager-ApiClient architecture: 
-  - Single responsibilities
-  - Well defined flow for callbacks (blocks or delegates to update the UI)
-  - Reusability with future services
-- Limit the memory consumption (number of results in memory) with very large datasets
-- Cancel a request for a page of results if the rows are not in the screen
-- Animate the transition when a cell is reused to display other result: we see a little abrupt transition when changing the thumbnail of a row 
-- Do not copy a Dictionary to store it on NSUserDefaults: NSUserDefaults+SwiftExtensions 
-
 ### Some Swift features tested in this project:
 - Interaction with Objective-C classes. We use the "Hello Swift Youtube-Bridging-Header.h" file to import Objective-C classes
 - Closures (Objective-C blocks)
@@ -61,3 +51,16 @@ We are looking for a robust architecture to implement the typical stack in a nat
   - Manage results pagination if needed
   - Append user credentials to the request if needed (ie OAuth Access Token)
 - Networking & Parsing libraries: In our case AFNetworking for the HTTP stuff & JSONModel for parsing and automatic required fields validation. In every service we pass to AFNetworking and JSONModel the JSONModel class we expect to receive as the API response. Any other response is automatically redirected to the same error callback we use for networking errors, so we move away the JSON structure error control code from every ApiClient service, making it generic. We have implemented this logic in our own tiny AFNetworking extension: the AFNetworking-JSONModel pod. See the YoutubeApiClient class
+
+### TODO Architecture
+- Redefine single responsibilities for every layer
+- Decide between blocks and delegates to refresh the UI when new data retrieved async from REST or Local Storage
+- Making it reusable when working with multiple services
+- Limit the memory consumption (number of results in memory) with very large datasets
+- Cancel a request for a page of results if the rows are not in the screen
+
+### TODO App specific
+- Animate the transition when a cell is reused to display other result: we see a little abrupt transition when changing the thumbnail of a row 
+
+### TODO Swift
+- Do not copy a Dictionary to store it on NSUserDefaults: NSUserDefaults+SwiftExtensions 

@@ -87,7 +87,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         return 1
     }*/
 
-    func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (youtubeManager != nil) {
             let searchResultsCount = youtubeManager!.searchResultsCount()
             println("numberOfItemsInSection \(searchResultsCount)")
@@ -97,8 +97,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
         }
     }
     
-    func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
-        
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as YouTubeCell
         
         // Configure the cell
@@ -110,7 +109,11 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
             } else {
                 let videoDto = dataObject as VideoDto
                 cell.titleLabel.text = videoDto.title
-                cell.thumbImageView.setImageWithURL(NSURL(string: videoDto.thumbnail))
+                // Swift does not support object initializers that fail by returning null. If there is a factory method, use it instead. Otherwise, capture the result in an optional.
+                let thumbnailUrl: NSURL? = NSURL.URLWithString(videoDto.thumbnail)
+                if (thumbnailUrl != nil) {
+                    cell.thumbImageView.setImageWithURL(thumbnailUrl)
+                }
             }
         }
         

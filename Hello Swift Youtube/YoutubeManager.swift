@@ -190,7 +190,7 @@ public class YoutubeManager: NSObject {
     }
     
     /**
-    Save JSON Objects to Realm
+    Save Objects to Realm
     */
     private func saveSearchResults(videos: [VideoDto], page: UInt) {
         
@@ -204,6 +204,7 @@ public class YoutubeManager: NSObject {
             realm.addObjectsFromArray(videos)
             realm.commitWriteTransaction()
             
+            // Once updated the Realm reload the new cells at the CollectionView
             dispatch_async(dispatch_get_main_queue(), {
                 self.videos = VideoDto.allObjects()
                 let indexes = self.pagedScrollHelper!.indexSetForPage(page)

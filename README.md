@@ -28,11 +28,11 @@ We are looking for a robust architecture to implement the typical layer stack in
   - Return meaningful errors to the ViewControllers (do not change drectly the UI of course)
 - Local Storage: Realm, CoreData (backed by SQLite or other storage engine), raw SQLite...
 - ApiClient
-  - Translate API objects (serialized & validated JSON objects) to DTOs (the data objects we use in the UI). In our case JSONModel objects to Realm objects. We can also define the serialized objects and the DTOs as the same thing or use some kind of automatic mapping.
   - Validate API responses (NOTE: for automatic required-fields validation we can rely on a parsing library like JSONModel)
   - Handle Api Errors
   - Manage results pagination if needed
   - Append user credentials to the request if needed (ie OAuth Access Token)
+  - [Under discussion] Translate API objects (serialized & validated JSON objects) to DTOs (the data objects we use in the UI). In our case JSONModel objects to Realm objects. We can also define the serialized objects and the DTOs as the same thing or use some kind of automatic mapping. NOTE: In the case of defining our DTOs as Realm or CoreData objects we must take into account that we should not share objects between threads. For example, if we use a separate thread to write to the DB, we should create the objects in this thread. Therefore we should create the DTO objects in the Manager and not in the ApiClient.
 - Networking & Parsing libraries: In our case AFNetworking for the HTTP stuff & JSONModel for parsing and automatic required fields validation. In every service we pass to AFNetworking and JSONModel the JSONModel class we expect to receive as the API response. Any other response is automatically redirected to the same error callback we use for networking errors, so we move away the JSON structure error control code from every ApiClient service, making it generic. We have implemented this logic in our own tiny AFNetworking extension: the AFNetworking-JSONModel pod. See the YoutubeApiClient class
 
 ### TODO Architecture

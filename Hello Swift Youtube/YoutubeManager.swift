@@ -34,6 +34,7 @@ public class YoutubeManager: NSObject {
             NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: SP_KEY_LAST_SEARCH_RESULT_COUNT)
         }
     }
+    /** This property must be accessed and updated only from the main thread (Realm objects should not be shared between threads) */
     private var videos: RLMArray?
     private var lastSearchString: String? {
         get {
@@ -82,7 +83,7 @@ public class YoutubeManager: NSObject {
     
     // MARK: - Public methods
     
-    public func search(searchString: String, onSuccess: (videos: [VideoDto]) -> Void, onError: (error: NSError) -> Void ) {
+    public func search(searchString: String, onSuccess: () -> Void, onError: (error: NSError) -> Void ) {
         
         let lastCachedSearchString = NSUserDefaults.standardUserDefaults().stringForKey(SP_KEY_LAST_CACHED_SEARCH_STRING)
         
@@ -140,28 +141,30 @@ public class YoutubeManager: NSObject {
     
     // MARK: - Private methods: REST API
     
-    private func searchOnApi(searchString: String, page: UInt, pageToken: String?, isFirstPage: Bool, onSuccess: (videos: [VideoDto]) -> Void, onError: (error: NSError) -> Void) {
+    private func searchOnApi(searchString: String, page: UInt, pageToken: String?, isFirstPage: Bool, onSuccess: () -> Void, onError: (error: NSError) -> Void) {
         
         YoutubeApiClient.sharedClient.search(searchString, pageToken: pageToken, resultsPerPage: RESULTS_PER_PAGE
-            , onSuccess: { (newVideos: [VideoDto], totalVideos: UInt, prevPageToken: String?, nextPageToken: String?) -> Void in
+            , onSuccess: { (searchListJSONModel: YUSearchListJSONModel) -> Void in
                 if (isFirstPage) {
                     self.resetSearchResults()
                     self.lastSearchString = searchString
                     // Instantiate pagedScrollHelper with totalCount
+                    let totalVideos: UInt = UInt(searchListJSONModel.pageInfo.totalResults)
                     self.pagedScrollHelper = PagedScrollHelper(count: totalVideos, objectsPerPage: self.RESULTS_PER_PAGE)
                     self.totalVideoCount = Int(totalVideos)
                 }
                 
-                self.saveSearchResults(newVideos, page: page)
+                let items: [YUItemJSONModel] = searchListJSONModel.items as [YUItemJSONModel]
+                self.saveSearchResults(items, page: page)
                 
                 self.pagesWithOngoingRequests.removeValueForKey(page)
                 self.cachedPages[String(page)] = true
 
                 if (page > 1) {
-                    self.pageTokens[String(page-1)] = prevPageToken!
+                    self.pageTokens[String(page-1)] = searchListJSONModel.prevPageToken
                 }
                 if (page < self.pagedScrollHelper!.numberOfPages()) {
-                    self.pageTokens[String(page+1)] = nextPageToken!
+                    self.pageTokens[String(page+1)] = searchListJSONModel.nextPageToken
                 }
                 
                 NSUserDefaults.standardUserDefaults().setDictionary(self.pageTokens, forKey:SP_KEY_LAST_SEARCH_PAGE_TOKENS)
@@ -171,7 +174,7 @@ public class YoutubeManager: NSObject {
                 // Se hace desde saveSearchResults
                 //self.delegate.dataProvider(self, didLoadDataAtIndexes: indexes)
                 println("YoutubeManager search onSuccess for page \(page) pageToken \(pageToken)")
-                onSuccess(videos: newVideos)
+                onSuccess()
                 
             }, onError: {  (error: NSError) -> Void in
                 onError(error: error)
@@ -190,21 +193,32 @@ public class YoutubeManager: NSObject {
     }
     
     /**
-    Save Objects to Realm
+    Save JSONModel objects to Realm
+    We should not share Realm Objects (aka DTOs) between threads: http://realm.io/docs/cocoa/0.85.0/#models
+    so we create the Realm Objects inside the writeAsync block (executed in the Write Queue of the default Realm)
     */
-    private func saveSearchResults(videos: [VideoDto], page: UInt) {
+    private func saveSearchResults(items: [YUItemJSONModel], page: UInt) {
         
         RealmHelper.sharedHelper.writeAsync { (realm: RLMRealm) in
             // This block is executed in other thread, so we obtain a RLMRealm instance for this thread
             // From Realm docs: "Do not share RLMRealm objects across threads"
             println("Default realm path \(realm.path)")
+            
+            // Create Realm Objects from JSONModel objects
+            var videos = [VideoDto]()
+            for item in items {
+                let videoDto = VideoDto(itemJsonModel: item)
+                videos.append(videoDto)
+            }
+            
             // Add all objects to the Realm inside a single transaction
             // From Realm docs: "unless you need to make simultaneous writes from many threads at once, you should favor larger write transactions that do more work over many fine-grained write transactions"
             realm.beginWriteTransaction()
             realm.addObjectsFromArray(videos)
             realm.commitWriteTransaction()
             
-            // Once updated the Realm reload the new cells at the CollectionView
+            // Once updated the Realm reload the updated cells at the CollectionView
+            // We could register a Notification to update the UI like described here (http://realm.io/docs/cocoa/0.85.0/#notifications), but we only want to reload the updated cells. Using the didLoadDataAtIndexes delegate method (or using a block) we can tell the ViewController the index set we want to reload
             dispatch_async(dispatch_get_main_queue(), {
                 self.videos = VideoDto.allObjects()
                 let indexes = self.pagedScrollHelper!.indexSetForPage(page)
@@ -234,7 +248,7 @@ public class YoutubeManager: NSObject {
         let pageToken = pageTokens[String(page)]
         
         searchOnApi(lastSearchString!, page: page, pageToken: pageToken, isFirstPage: false
-            , onSuccess: { (videos: [VideoDto]) -> Void in
+            , onSuccess: { () -> Void in
                 //Do nothing. The UI is notified only after Realm updated (at saveSearchResults())
             }, onError: { (error: NSError) -> Void in
                 self.delegate.manager(self, errorLoadingDataAtIndexes: indexes, error: error)

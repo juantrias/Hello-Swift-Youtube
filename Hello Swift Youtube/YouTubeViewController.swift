@@ -55,7 +55,7 @@ class YouTubeViewController: UIViewController, UICollectionViewDataSource, UICol
             self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: true)
         }
         
-        self.youtubeManager?.search(searchString, onSuccess: { (videos) -> Void in
+        self.youtubeManager?.search(searchString, onSuccess: {
             
             //self.collectionView.reloadData()
             self.reloadAllVideos = true

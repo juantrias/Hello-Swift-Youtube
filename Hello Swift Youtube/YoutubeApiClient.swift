@@ -31,7 +31,7 @@ class YoutubeApiClient {
     
     // Como definimos el callback cuando se han guardado los datos en el Realm? Come gestionamos la paginacion con el Realm?
     
-    func search(query: String, pageToken: String?, resultsPerPage: UInt, onSuccess: (videos: [VideoDto], totalVideoCount: UInt, prevPageToken: String?, nextPageToken: String?) -> Void, onError: (NSError) -> Void) {
+    func search(query: String, pageToken: String?, resultsPerPage: UInt, onSuccess: (searchListJSONModel: YUSearchListJSONModel) -> Void, onError: (NSError) -> Void) {
         
         var params = ["part": "id,snippet", "q": query, "type": "video", "maxResults": String(resultsPerPage), "key": YOUTUBE_API_KEY]
         
@@ -49,13 +49,7 @@ class YoutubeApiClient {
             
             appDelegate.setNetworkActivityIndicatorVisible(false)
             
-            var videos = [VideoDto]()
-            for item in searchListJSONModel.items {
-                let videoDto = VideoDto(itemJsonModel: item as YUItemJSONModel)
-                videos.append(videoDto)
-            }
-            
-            onSuccess(videos: videos, totalVideoCount: searchListJSONModel.pageInfo.totalResults, prevPageToken:searchListJSONModel.prevPageToken, nextPageToken:searchListJSONModel.nextPageToken)
+            onSuccess(searchListJSONModel: searchListJSONModel)
         }
         , failure: {(operation: AFHTTPRequestOperation!, error: NSError!) in
             println("Error received \(error)")

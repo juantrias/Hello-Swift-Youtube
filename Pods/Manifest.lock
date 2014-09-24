@@ -1,46 +1,47 @@
 PODS:
-  - AFNetworking (2.2.4):
+  - AFNetworking (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
     - AFNetworking/UIKit
-  - AFNetworking-JSONModel (0.0.1):
-    - AFNetworking (~> 2.2.0)
-    - JSONModel (~> 0.13.0)
-  - AFNetworking/NSURLConnection (2.2.4):
+  - AFNetworking-JSONModel (0.0.2):
+    - AFNetworking (~> 2.4.1)
+    - JSONModel (~> 1.0.1)
+  - AFNetworking/NSURLConnection (2.4.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.2.4):
-    - AFNetworking/NSURLConnection
-  - AFNetworking/Reachability (2.2.4)
-  - AFNetworking/Security (2.2.4)
-  - AFNetworking/Serialization (2.2.4)
-  - AFNetworking/UIKit (2.2.4):
+  - AFNetworking/NSURLSession (2.4.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.4.1)
+  - AFNetworking/Security (2.4.1)
+  - AFNetworking/Serialization (2.4.1)
+  - AFNetworking/UIKit (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - JSONModel (0.13.0)
+  - JSONModel (1.0.1)
   - Realm (0.84.0):
     - Realm/Headers
   - Realm/Headers (0.84.0)
   - youtube-ios-player-helper (0.1.1)
 
 DEPENDENCIES:
-  - AFNetworking-JSONModel (from `https://github.com/IGZjuantrias/AFNetworking-JSONModel.git`, tag `0.0.1`)
+  - AFNetworking-JSONModel (from `https://github.com/IGZjuantrias/AFNetworking-JSONModel.git`)
   - Realm (~> 0.84.0)
   - youtube-ios-player-helper (~> 0.1.1)
 
 EXTERNAL SOURCES:
   AFNetworking-JSONModel:
     :git: https://github.com/IGZjuantrias/AFNetworking-JSONModel.git
-    :tag: 0.0.1
 
 SPEC CHECKSUMS:
-  AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
-  AFNetworking-JSONModel: 4fa9d7323aa3f0c1a2da08f8921c7b5bd5a6c91e
-  JSONModel: 62ea96b49ea18a8b91ef89c249dba291d8601d82
+  AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
+  AFNetworking-JSONModel: 57b40405640dabcc0d6c013db9705b309bd4d5b7
+  JSONModel: 634100aaacbd89811bc8a03da209356e5989c569
   Realm: 097412d7bcbba45ad5037add12e0395136070d88
   youtube-ios-player-helper: 53aecd0b4763a77e6890e9a7c55abb7b5c4bedea
 

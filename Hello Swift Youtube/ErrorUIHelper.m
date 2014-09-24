@@ -15,8 +15,8 @@
     // Check errors from more app-specific to more general:
     
     // Network errors
-    //Error codes for `AFNetworkingErrorDomain` correspond to codes in `NSURLErrorDomain`
-    if ([error.domain isEqualToString:NSURLErrorDomain] || [error.domain isEqualToString:AFNetworkingErrorDomain]) {
+    //Error codes for `AFURLResponseSerializationErrorDomain` and `AFURLRequestSerializationErrorDomain` correspond to codes in `NSURLErrorDomain`
+    if ([error.domain isEqualToString:NSURLErrorDomain] || [error.domain isEqualToString:AFURLResponseSerializationErrorDomain] || [error.domain isEqualToString:AFURLRequestSerializationErrorDomain]) {
         if (error.code == kCFURLErrorTimedOut) {
             return NSLocalizedString(@"The connection timed out", nil);
             

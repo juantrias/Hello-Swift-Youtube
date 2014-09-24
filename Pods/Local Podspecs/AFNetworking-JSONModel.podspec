@@ -16,11 +16,11 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AFNetworking-JSONModel"
-  s.version      = "0.0.1"
-  s.summary      = "AFNetworking-JSONModel is a wrapper over some methods of AFNetworking to make the integration with the JSONModel parsing library easier"
+  s.version      = "0.0.2"
+  s.summary      = "A tiny AFNetworking extension to simplify the integration with the JSONModel parsing library"
 
   s.description  = <<-DESC
-                   AFNetworking-JSONModel is a wrapper over some methods of AFNetworking to make the integration with the JSONModel parsing library easier
+                   In every service we pass to our AFHTTPRequestOperationManager+JsonModelRequestOperationManager category the JSONModel class we expect to receive as the API response. Any other response is automatically redirected to the same error callback we use for networking errors, so we move away the JSON error control code from every ApiClient service, making it generic
                    DESC
 
   s.homepage     = "https://github.com/IGZjuantrias/AFNetworking-JSONModel"
@@ -34,9 +34,9 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "MIT"
-  # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
-
+  s.license      = { :type => "MIT", :file => "LICENSE" }
+  # s.license      = "MIT"
+  
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -71,7 +71,7 @@ Pod::Spec.new do |s|
   #  Specify the location from where the source should be retrieved.
   #  Supports git, hg, bzr, svn and HTTP.
   #
-  s.source       = { :git => "https://github.com/IGZjuantrias/AFNetworking-JSONModel.git", "tag" => "0.0.1" }
+  s.source       = { :git => "https://github.com/IGZjuantrias/AFNetworking-JSONModel.git", "tag" => "0.0.2" }
   #s.source       = { :git => "http://EXAMPLE/AFNetworking-JSONModel.git", :tag => "0.0.1" }
 
 
@@ -84,7 +84,7 @@ Pod::Spec.new do |s|
   #
 
   s.source_files  = "Classes", "Classes/**/*.{h,m}"
-  s.exclude_files = "Classes/Exclude"
+  s.exclude_files = "Example"
 
   # s.public_header_files = "Classes/**/*.h"
 
@@ -125,7 +125,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "AFNetworking", "~> 2.2.0"
-  s.dependency "JSONModel", "~> 0.13.0"
+  s.dependency "AFNetworking", "~> 2.4.1"
+  s.dependency "JSONModel", "~> 1.0.1"
 
 end

@@ -11,9 +11,9 @@
 
 @interface YUSnippetJSONModel : JSONModel
 
-@property (strong, nonatomic) NSString *title;
-@property (strong, nonatomic) NSString *descr;
-@property (strong, nonatomic) YUThumbnailsJSONModel *thumbnails;
-@property (strong, nonatomic) NSString *channelTitle;
+@property (strong, atomic) NSString *title;
+@property (strong, atomic) NSString *descr;
+@property (strong, atomic) YUThumbnailsJSONModel *thumbnails;
+@property (strong, atomic) NSString *channelTitle;
 
 @end

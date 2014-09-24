@@ -10,6 +10,6 @@
 
 @interface YUItemIdJSONModel : JSONModel
 
-@property (strong, nonatomic) NSString *videoId; //wtLJPvx7-ys
+@property (strong, atomic) NSString *videoId; //wtLJPvx7-ys
 
 @end

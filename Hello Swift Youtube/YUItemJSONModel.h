@@ -15,7 +15,7 @@
 
 @interface YUItemJSONModel : JSONModel
 
-@property (strong, nonatomic) YUItemIdJSONModel *id;
-@property (strong, nonatomic) YUSnippetJSONModel *snippet;
+@property (strong, atomic) YUItemIdJSONModel *id;
+@property (strong, atomic) YUSnippetJSONModel *snippet;
 
 @end

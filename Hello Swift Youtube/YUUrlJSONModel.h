@@ -10,6 +10,6 @@
 
 @interface YUUrlJSONModel : JSONModel
 
-@property (strong, nonatomic) NSString *url;
+@property (strong, atomic) NSString *url;
 
 @end

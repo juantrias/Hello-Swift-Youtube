@@ -11,8 +11,8 @@
 
 @interface YUThumbnailsJSONModel : JSONModel
 
-@property (strong, nonatomic) YUUrlJSONModel *defaultThumb; //default is a reserved word in Objective C
-@property (strong, nonatomic) YUUrlJSONModel *medium;
-@property (strong, nonatomic) YUUrlJSONModel *high;
+@property (strong, atomic) YUUrlJSONModel *defaultThumb; //default is a reserved word in Objective C
+@property (strong, atomic) YUUrlJSONModel *medium;
+@property (strong, atomic) YUUrlJSONModel *high;
 
 @end

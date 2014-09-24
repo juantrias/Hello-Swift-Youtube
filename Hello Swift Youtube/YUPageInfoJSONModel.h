@@ -10,7 +10,7 @@
 
 @interface YUPageInfoJSONModel : JSONModel
 
-@property (strong, nonatomic) NSNumber *totalResults;
-@property (strong, nonatomic) NSNumber *resultsPerPage;
+@property (strong, atomic) NSNumber *totalResults;
+@property (strong, atomic) NSNumber *resultsPerPage;
 
 @end
